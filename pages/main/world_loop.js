@@ -1,6 +1,14 @@
 import { playMainMusic, playMoveSound } from "../../music.js";
 import { getRandomInt, loadPage, loadPokemonList } from "../../utilities.js";
-import { battleBackground, battlePage, battlePokemon, battle, starterMusic } from "../../constants.js";
+import {
+    battleBackground,
+    battlePage,
+    battlePokemon,
+    battle,
+    starterMusic,
+    myPokemonKey,
+    starterPage
+} from "../../constants.js";
 
 import { canMove, maskIndex } from "./worlds/collision.js";
 import {clearCatch, setUpPokemonSelect, setUpCatch, generateRandomTrainer} from "./scripts/controls.js";
@@ -59,6 +67,11 @@ const actions = []
 
 let standby = false
 async function setup() {
+    const pokemonData = localStorage.getItem(myPokemonKey);
+    if(pokemonData === null) {
+        await loadPage(starterPage)
+    }
+
     const audio = await playMainMusic(starterMusic)
     try {
         await audio.play()

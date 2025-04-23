@@ -1,8 +1,27 @@
 import { playMainMusic } from "../../music.js";
 import { getRandomInt, loadPage, loadPokemonList } from "../../utilities.js";
-import { battlePokemon, battle, myPokemonKey, selectedPokemon, allPokemon, victoryMusic, mainPage, battleMusic, battleBackground} from "../../constants.js";
+import {
+    battlePokemon,
+    battle,
+    myPokemonKey,
+    selectedPokemon,
+    allPokemon,
+    victoryMusic,
+    mainPage,
+    battleMusic,
+    battleBackground,
+    starterPage
+} from "../../constants.js";
 
-import { manageSelection, pushLog, initAttacks, initSelection, toggleAttacks, disableSelection } from "./scripts/controls.js";
+import {
+    manageSelection,
+    pushLog,
+    initAttacks,
+    initSelection,
+    toggleAttacks,
+    disableSelection,
+    pokeBallsInit, managePokeBalls
+} from "./scripts/controls.js";
 import { clearRect,  drawPlayer1Pokemon, drawPlayer2Pokemon, drawPokemonHealth, drawPokemonUI, loadPokemonImages, loadPokemonUI, setBackground, waitLoadFonts } from "./scripts/draw.js";
 
 const body = document.getElementById("body")
@@ -16,13 +35,23 @@ function calcDamage(power, attacker, defender) {
 
 let backgroundMusic
 async function setup() {
+    const battleSettingsData = localStorage.getItem(battle)
+    const localPokemonData = localStorage.getItem(myPokemonKey)
+
+    if(localPokemonData === null) {
+        await loadPage(starterPage)
+    }
+    if(battleSettingsData === null) {
+        await loadPage(mainPage)
+    }
+
     backgroundMusic = await playMainMusic(battleMusic)
-    await backgroundMusic.play()
+    //await backgroundMusic.play()
 
-    const battleSettings = JSON.parse(localStorage.getItem(battle))
-    const localPokemonData = JSON.parse(localStorage.getItem(myPokemonKey))
+    const battleSettings = JSON.parse(battleSettingsData)
+    const parsedPokemonData = JSON.parse(localPokemonData)
 
-    const player1Pokemon = await loadPokemonList(localPokemonData[selectedPokemon])
+    const player1Pokemon = await loadPokemonList(parsedPokemonData[selectedPokemon])
     const player2Pokemon = await loadPokemonList(battleSettings[battlePokemon])
 
     await setBackground(battleSettings[battleBackground])
@@ -39,6 +68,8 @@ async function setup() {
 
     await drawPokemonHealth(player1Pokemon[0], player2Pokemon[0])
     await drawPokemonUI(player1Pokemon[0], player2Pokemon[0])
+
+    await pokeBallsInit(player2Pokemon.length)
 
     initAttacks(player1Pokemon[0])
 
@@ -206,6 +237,9 @@ async function gameLoop(player1Index, player2Index, player1Pokemon, player2Pokem
                     await initAttacks(player1Pokemon[player1Index])
                 else
                     await toggleAttacks(player1Pokemon[player1Index].moves.length)
+
+                if(prevPlayer2Index !== player2Index)
+                    await managePokeBalls(player2Pokemon)
             }
             else
             {

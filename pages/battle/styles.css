@@ -222,6 +222,23 @@ body {
     color: gray;
 }
 
+#player_poke_balls {
+    position: absolute;
+
+    top: 16.5rem;
+    right: 15rem;
+
+    height: 3rem;
+}
+
+#player_poke_balls img {
+    width: 2rem;
+    height: auto;
+
+    margin-left: .5rem;
+    margin-right: .5rem;
+}
+
 #back_to_home {
     background-color: var(--color-grass);
 

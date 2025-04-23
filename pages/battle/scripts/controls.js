@@ -133,3 +133,22 @@ const back_to_home = document.getElementById('back_to_home')
 back_to_home.onclick = async () => {
     await loadPage(mainPage)
 }
+
+
+const pokeBalls = []
+const player2PokeBalls = document.getElementById('player_poke_balls')
+export async function pokeBallsInit(count) {
+    for(let i = 0; i < count; i++) {
+        const pokeBall = document.createElement("img")
+        pokeBall.src = "ui/pokeball.png"
+
+        player2PokeBalls.appendChild(pokeBall)
+    }
+}
+
+export async function managePokeBalls(pokemon) {
+    for(let i = 0; i < pokemon.length; i++) {
+        if(pokemon[i].health <= 0)
+            pokeBalls[i].src = ""
+    }
+}

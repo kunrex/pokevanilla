@@ -5,7 +5,6 @@ const backgrounds = ["backgrounds/battle.jpg", "backgrounds/water-battle.jpg"];
 
 const background = document.getElementById("background");
 export async function setBackground(index) {
-    console.log(index)
     await loadImage(background, backgrounds[index])
 }
 
