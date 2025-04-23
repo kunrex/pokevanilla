@@ -1,8 +1,8 @@
-import {active, gif, inactive, mainPage} from "../../../constants.js";
+import {active, gif, inactive, mainPage} from "../../../../constants.js";
 
 import { pushAction } from "../battle.js";
-import { loadPage } from "../../../utilities.js";
-import { playButtonClick } from "../../../music.js";
+import { loadPage } from "../../../../utilities.js";
+import { playButtonClick } from "../../../../music.js";
 
 function getAttackButtons() {
     const attackStr = "attack"

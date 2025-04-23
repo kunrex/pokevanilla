@@ -1,4 +1,4 @@
-import { loadImage } from "../../../utilities.js";
+import { loadImage } from "../../../../utilities.js";
 
 const worlds = ["worlds/world1.png", "worlds/world2.png", "worlds/world3.png", "worlds/world4.png"];
 

@@ -26,11 +26,11 @@ export const battle = "battle", battleBackground = "battleBackground", battlePok
 export const starterMusic = "starter", battleMusic = "battleMusic", victoryMusic = "victoryMusic", click = "click", moveSound = "move"
 
 export const audio = {
-    [starterMusic] : "../../audio/starter.ogg",
-    [battleMusic] : "../../audio/battle.ogg",
-    [victoryMusic]: "../../audio/victory.ogg",
-    [click]:  "../../audio/click.mp3",
-    [moveSound]: "../../audio/move.mp3",
+    [starterMusic] : "../../../audio/starter.ogg",
+    [battleMusic] : "../../../audio/battle.ogg",
+    [victoryMusic]: "../../../audio/victory.ogg",
+    [click]:  "../../../audio/click.mp3",
+    [moveSound]: "../../../audio/move.mp3",
 }
 
 export const active = "active", inactive = "inactive"
