@@ -1,6 +1,6 @@
-import { playMainMusic, playMoveSound } from "../../../music.js";
-import { getRandomInt, loadPage, loadPokemonList } from "../../../utilities.js";
-import { battleBackground, battlePage, battlePokemon, battle, starterMusic } from "../../../constants.js";
+import { playMainMusic, playMoveSound } from "../../music.js";
+import { getRandomInt, loadPage, loadPokemonList } from "../../utilities.js";
+import { battleBackground, battlePage, battlePokemon, battle, starterMusic } from "../../constants.js";
 
 import { canMove, maskIndex } from "./worlds/collision.js";
 import {clearCatch, setUpPokemonSelect, setUpCatch, generateRandomTrainer} from "./scripts/controls.js";

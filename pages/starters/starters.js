@@ -1,6 +1,6 @@
-import { loadPage, loadPokemonList } from "../../../utilities.js";
-import { playButtonClick, playMainMusic } from "../../../music.js";
-import { starters, gif, mainPage, myPokemonKey, allPokemon, selectedPokemon, starterMusic } from "../../../constants.js";
+import { loadPage, loadPokemonList } from "../../utilities.js";
+import { playButtonClick, playMainMusic } from "../../music.js";
+import { starters, gif, mainPage, myPokemonKey, allPokemon, selectedPokemon, starterMusic } from "../../constants.js";
 
 const body = document.getElementById("body");
 const loading = document.getElementById("loading")

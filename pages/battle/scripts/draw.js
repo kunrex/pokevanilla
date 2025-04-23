@@ -1,5 +1,5 @@
-import { loadImage } from "../../../../utilities.js";
-import { showdownBack , showdownFront, gif } from "../../../../constants.js";
+import { loadImage } from "../../../utilities.js";
+import { showdownBack , showdownFront, gif } from "../../../constants.js";
 
 const backgrounds = ["backgrounds/battle.jpg", "backgrounds/water-battle.jpg"];
 

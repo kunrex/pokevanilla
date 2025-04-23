@@ -1,6 +1,6 @@
-import { playMainMusic } from "../../../music.js";
-import { getRandomInt, loadPage, loadPokemonList } from "../../../utilities.js";
-import { battlePokemon, battle, myPokemonKey, selectedPokemon, allPokemon, victoryMusic, mainPage, battleMusic, battleBackground} from "../../../constants.js";
+import { playMainMusic } from "../../music.js";
+import { getRandomInt, loadPage, loadPokemonList } from "../../utilities.js";
+import { battlePokemon, battle, myPokemonKey, selectedPokemon, allPokemon, victoryMusic, mainPage, battleMusic, battleBackground} from "../../constants.js";
 
 import { manageSelection, pushLog, initAttacks, initSelection, toggleAttacks, disableSelection } from "./scripts/controls.js";
 import { clearRect,  drawPlayer1Pokemon, drawPlayer2Pokemon, drawPokemonHealth, drawPokemonUI, loadPokemonImages, loadPokemonUI, setBackground, waitLoadFonts } from "./scripts/draw.js";
