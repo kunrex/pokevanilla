@@ -1,0 +1,158 @@
+@import "../../global.css";
+
+body {
+    background-color: navajowhite;
+}
+
+#body, #loading {
+    position: fixed;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+}
+
+#body h1 {
+    margin: 0;
+
+    font-size: 3rem;
+    font-family: RetroFont, monospace;
+}
+
+#ui_parent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    max-width: 1000px;
+
+    padding: 5rem 10rem;
+
+    border-radius: 1rem;
+
+    background-color: papayawhip;
+}
+
+#canvas_background {
+    border-style: solid;
+    border-color: black;
+    border-width: .25rem;
+    border-radius: .25rem;
+
+    background-color: black;
+}
+
+#world_ui {
+    width: 512px;
+
+    margin-left: 2rem;
+}
+
+#pokemon_alert {
+    background-color: var(--color-electric);
+
+    padding: 1rem;
+    border-radius: 1rem;
+
+    width: 6rem;
+    height: 8rem;
+
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+#pokemon_alert img {
+    height: 5rem;
+    width: auto;
+
+    margin: 1rem;
+}
+
+#pokemon_alert span {
+    font-size: 1.5rem;
+    font-family: RobotoThin, sans-serif;
+}
+
+#catch {
+    border-radius: 1rem;
+
+    padding: 1rem;
+
+    text-align: center;
+    text-decoration: none;
+
+    background-color: var(--color-electric);
+
+    font-size: 1rem;
+    font-family: RetroFont, sans-serif;
+}
+
+#catch:hover {
+    border-color: navajowhite;
+}
+
+#catch:active {
+    border-color: black;
+}
+
+#catch:disabled {
+    border-color: transparent;
+}
+
+#pokemon_select {
+    width: 30rem;
+    height: 10rem;
+
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    background-color: wheat;
+
+    padding: 0.25rem;
+
+    border-radius: 1rem;
+}
+
+#world_ui h2 {
+    margin: 4rem 1rem 1rem;
+
+    font-size: 2rem;
+    font-family: RobotoThin, sans-serif;
+}
+
+.pokemon_avatar_container {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.pokemon_avatar {
+    border-radius: 50%;
+
+    width: 4rem;
+    height: 4rem;
+
+    border-width: .2rem;
+    border-style: solid;
+    border-color: transparent;
+
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.pokemon_avatar img {
+    height: 3.5rem;
+    width: 3.5rem;
+}
+
+#instructions_parent {
+    margin-top: 1rem;
+}
+
+#instructions {
+    font-size: 1.2rem;
+    font-family: RetroFont, sans-serif;
+}

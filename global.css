@@ -1,0 +1,86 @@
+:root {
+    --color-normal:   #A8A77A;
+    --color-fire:     #EE8130;
+    --color-water:    #6390F0;
+    --color-electric: #F7D02C;
+    --color-grass:    #7AC74C;
+    --color-ice:      #96D9D6;
+    --color-fighting: #C22E28;
+    --color-poison:   #A33EA1;
+    --color-ground:   #E2BF65;
+    --color-flying:   #A98FF3;
+    --color-psychic:  #F95587;
+    --color-bug:      #A6B91A;
+    --color-rock:     #B6A136;
+    --color-ghost:    #735797;
+    --color-dragon:   #6F35FC;
+    --color-dark:     #705746;
+    --color-steel:    #B7B7CE;
+    --color-fairy:    #D685AD;
+}
+
+@font-face {
+    font-family: 'RetroFont';
+    src: url('fonts/retro.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('fonts/roboto.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'RobotoThin';
+    src: url('fonts/roboto-thin.ttf') format('truetype');
+}
+
+#volume {
+    position: fixed;
+
+    left: 1rem;
+    bottom: 1rem;
+
+    width: 2.5rem;
+    height: auto;
+}
+
+.row, .column, .row_start, .row_end, .column_start, .column_end {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    justify-content: space-evenly;
+}
+
+.row, .row_start, .row_end {
+    flex-direction: row;
+}
+
+.column, .column_start, .column_end {
+    flex-direction: column;
+}
+
+.row_start {
+    justify-content: start;
+}
+
+.row_end {
+    justify-content: end;
+}
+
+.column_start {
+    justify-content: start;
+}
+
+.column_end {
+    justify-content: end;
+}
+
+.overflow_x {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.overflow_y {
+    overflow-x: hidden;
+    overflow-y: auto;
+}

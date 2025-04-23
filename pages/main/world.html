@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="world_loop.js" defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <img id="loading" src="../../loading/loading.gif" alt="loading">
+  <div id="body" class="column" style="display: none">
+    <img id="volume" src="../../loading/volume.webp" alt="volume">
+    <div id="ui_parent" class="column">
+      <h1>
+        World Map
+      </h1>
+      <div class="row">
+        <div id="canvas_background">
+          <canvas id="world"></canvas>
+        </div>
+        <div id="world_ui">
+          <div class="column">
+            <div id="pokemon_alert" class="column">
+              <img>
+              <span> </span>
+            </div>
+            <button id="catch">
+              Catch This Pokemon
+            </button>
+            <h2>
+              Your Pokemon
+            </h2>
+            <div id="pokemon_select"></div>
+          </div>
+        </div>
+      </div>
+      <div id="instructions_parent">
+        <span id="instructions">
+          1. Use WASD to move around the world!
+          <br>
+          2. Your Pokemon is your arsenal! you may select up to 6 Pokemon as your team to fight other Pokemon and trainers
+           <br>
+          3. Select a Pokemon avatar to select or deselect it from your team
+           <br>
+          4. Have Fun!!
+        </span>
+      </div>
+    </div>
+    <div style="display:none;">
+      <img id="background" alt="background"/>
+      <img id="player" alt="player"/>
+    </div>
+  </div>
+</body>
+</html>

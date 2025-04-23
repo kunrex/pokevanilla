@@ -1,0 +1,74 @@
+@import "../../global.css";
+
+body {
+    background-color: papayawhip;
+}
+
+h1 {
+    color: var(--color-dark);
+    font-family: Roboto, sans-serif;
+}
+
+#loading {
+    position: fixed;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+}
+
+button {
+    border-radius: 1rem;
+    border-color: transparent;
+
+    color: white;
+    background-color: var(--color-grass);
+
+    padding: 1rem;
+
+    text-align: center;
+    text-decoration: none;
+
+    display: inline-block;
+
+    margin-left: 2rem;
+
+    font-size: 1rem;
+    font-family: Roboto, sans-serif;
+}
+
+button:active {
+    color: black;
+}
+
+button:disabled {
+    color: lightgray;
+}
+
+.start_card_container {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.starter_card {
+    padding: 1rem;
+
+    width: 6rem;
+    height: 8rem;
+
+    border-style: solid;
+    border-radius: 1rem;
+    border-width: .25rem;
+    border-color: transparent;
+
+    font-family: RobotoThin, sans-serif;
+}
+
+.starter_card[data-status="active"] {
+    border-color: #161616;
+}
+
+.starter_card[data-status="inactive"] {
+    border-color: transparent;
+}

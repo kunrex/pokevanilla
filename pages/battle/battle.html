@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+
+  <link rel="stylesheet" href="styles.css">
+  <script src="battle.js" type="module" defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <div>
+    <img id="loading" src="../../loading/loading.gif" alt="loading">
+    <div id="body" style="display: none">
+      <img id="volume" src="../../loading/volume.webp" alt="volume">
+      <div>
+        <img id="background" src="backgrounds/battle.jpg" alt="background_test">
+      </div>
+      <div class="column">
+        <div class="row_base">
+          <div id="side_bar_controls" class="column_end">
+            <div id="attack1" class="attack">
+              <div class="attack_background row_start">
+                <div class="attack_title_container">
+                  <h3 class="attack_title">hello</h3>
+                  <div class="attack_sub_title"><h6 >hello</h6></div>
+                </div>
+              </div>
+              <div class="power_background">
+                <h2 class="power">95</h2>
+              </div>
+            </div>
+            <div id="attack2" class="attack">
+              <div class="attack_background row_start">
+                <div class="attack_title_container">
+                  <h3 class="attack_title">hello</h3>
+                  <div class="attack_sub_title"><h6 >hello</h6></div>
+                </div>
+              </div>
+              <div class="power_background">
+                <h2 class="power">95</h2>
+              </div>
+            </div>
+            <div id="attack3" class="attack">
+              <div class="attack_background row_start">
+                <div class="attack_title_container">
+                  <h3 class="attack_title">hello</h3>
+                  <div class="attack_sub_title"><h6 >hello</h6></div>
+                </div>
+              </div>
+              <div class="power_background">
+                <h2 class="power">95</h2>
+              </div>
+            </div>
+            <div id="attack4" class="attack">
+              <div class="attack_background row_start">
+                <div class="attack_title_container">
+                  <h3 class="attack_title">hello</h3>
+                  <div class="attack_sub_title"><h6 >hello</h6></div>
+                </div>
+              </div>
+              <div class="power_background">
+                <h2 class="power">95</h2>
+              </div>
+            </div>
+            <div class="row">
+              <button id="back_to_home">
+                Back to World
+              </button>
+            </div>
+          </div>
+          <canvas id="world"></canvas>
+        </div>
+        <div class="row">
+          <div id="pokemon_select" class="row"></div>
+        </div>
+        <div class="battle_log_container">
+          <div id="log_container" class="overflow_y">
+            <ul id="log">
+            </ul>
+          </div>
+          <img id="what_will_do" src="backgrounds/what-will-do.png" alt="what-will-do">
+        </div>
+      </div>
+      <div style="display:none;">
+        <img id="player1Bar" alt="background"/>
+        <img id="player1" alt="background"/>
+        <img id="player1Health" alt="background"/>
+        <img id="player2" alt="background"/>
+        <img id="player2Bar" alt="background"/>
+        <img id="player2Health" alt="background"/>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
