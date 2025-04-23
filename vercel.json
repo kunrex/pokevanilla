@@ -1,7 +1,7 @@
 {
   "rewrites": [
       {
-          "source": "./pages/loading",
+          "source": "./pages/loading/",
           "destination": "loading-page.html"
       }
   ]
