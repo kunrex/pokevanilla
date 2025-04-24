@@ -1,6 +1,6 @@
 import { playMainMusic, playMoveSound } from "../../music.js";
 import { getRandomInt, loadPage, loadPokemon, onWindowResize } from "../../utilities.js";
-import { battleBackground, battlePage, battlePokemon, battle, starterMusic, myPokemonKey, starterPage, worldIndexKey } from "../../constants.js";
+import { battlePage, battlePokemon, battle, starterMusic, myPokemonKey, starterPage, worldIndexKey, terrainIndexes, worldRequests } from "../../constants.js";
 
 import { canMove, maskIndex } from "./worlds/collision.js";
 import { clearCatch, setUpPokemonSelect, setUpCatch, generateRandomTrainer } from "./scripts/controls.js";
@@ -15,28 +15,31 @@ const loading = document.getElementById("loading")
 
 body.style.display = "none"
 
-const grassLandPokemon = []
-const watersEdgePokemon = []
-
-async function loadPokemonFromHabitat(url, collection) {
+const terrainBasedPokemon = []
+async function loadPokemonFromHabitat(url) {
     const response = await fetch(url)
     if (!response.ok)
         return
+
+    const collection = []
 
     const json = await response.json()
     const allPokemon = json["pokemon_species"]
 
     for(let i = 0; i < allPokemon.length; i++)
         collection.push(allPokemon[i].name)
+
+    return collection
 }
 
 async function generateRandomPokemon(x, y) {
     const index = maskIndex(x, y)
+    const terrainPokemon = terrainBasedPokemon[maskIndex(x, y)]
 
     if (index > 0)
-        await setUpCatch(await loadPokemon(grassLandPokemon[getRandomInt(0, grassLandPokemon.length)]))
+        await setUpCatch(await loadPokemon(terrainPokemon[getRandomInt(0, terrainPokemon.length)]))
     else
-        await setUpCatch(await loadPokemon(watersEdgePokemon[getRandomInt(0, watersEdgePokemon.length)]))
+        await setUpCatch(await loadPokemon(terrainPokemon[getRandomInt(0, terrainPokemon.length)]))
 }
 
 async function generateRandomOpponent(x, y) {
@@ -78,8 +81,8 @@ async function setup() {
 
     await setUpPokemonSelect()
 
-    await loadPokemonFromHabitat("https://pokeapi.co/api/v2/pokemon-habitat/grassland/", grassLandPokemon)
-    await loadPokemonFromHabitat("https://pokeapi.co/api/v2/pokemon-habitat/waters-edge/", watersEdgePokemon)
+    for(let i = 0; i < terrainIndexes.length; i++)
+        terrainBasedPokemon.push(await loadPokemonFromHabitat(worldRequests[i]))
 
     body.style.display = "block"
     loading.style.display = "none"
@@ -127,6 +130,7 @@ async function gameLoop(x, y, spriteIndex, worldIndex) {
         const action = actions.shift()
 
         standby = true
+        let move = false
         switch (action)
         {
             case 0:
@@ -135,6 +139,8 @@ async function gameLoop(x, y, spriteIndex, worldIndex) {
                     x--
                     spriteIndex = 1
                     worldIndex = calculateWorldIndex(x, y)
+
+                    move = true
                 }
                 break
             case 1:
@@ -143,6 +149,8 @@ async function gameLoop(x, y, spriteIndex, worldIndex) {
                     x++
                     spriteIndex = 2
                     worldIndex = calculateWorldIndex(x, y)
+
+                    move = true
                 }
                 break
             case 2:
@@ -151,6 +159,8 @@ async function gameLoop(x, y, spriteIndex, worldIndex) {
                     y--
                     spriteIndex = 3
                     worldIndex = calculateWorldIndex(x, y)
+
+                    move = true
                 }
                 break
             case 3:
@@ -159,11 +169,12 @@ async function gameLoop(x, y, spriteIndex, worldIndex) {
                     y++
                     spriteIndex = 0
                     worldIndex = calculateWorldIndex(x, y)
+
+                    move = true
                 }
                 break
             default:
                 localStorage.setItem(battle, JSON.stringify({
-                    [battleBackground] : maskIndex(x, y),
                     [battlePokemon]: action
                 }))
 
@@ -176,10 +187,13 @@ async function gameLoop(x, y, spriteIndex, worldIndex) {
                 break
         }
 
-        await playMoveSound()
-        await draw(spriteIndex, x, y)
+        if(move)
+        {
+            await playMoveSound()
+            await draw(spriteIndex, x, y)
 
-        await generateRandomOpponent(x, y)
+            await generateRandomOpponent(x, y)
+        }
 
         standby = false
     }

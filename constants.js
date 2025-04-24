@@ -21,7 +21,7 @@ export const starters = [
 
 export const showdownBack = "back", showdownFront = "front", gif = "gif", avatar = "avatar"
 
-export const battle = "battle", battleBackground = "battleBackground", battlePokemon = "battlePokemon"
+export const battle = "battle", battlePokemon = "battlePokemon"
 
 export const starterMusic = "starter", battleMusic = "battleMusic", victoryMusic = "victoryMusic", click = "click", moveSound = "move"
 
@@ -134,3 +134,17 @@ export const attackTypeTable = {
 }
 
 export const worldIndexKey = "worldIndex"
+
+export const sea = 0, wtr = 1, rck = 2, mtn = 3, grs = 4, fst = 5, urb = 6, nan = -1
+
+export const terrainIndexes = [sea, wtr, rck, mtn, grs, fst, urb]
+
+export const worldRequests = [
+    "https://pokeapi.co/api/v2/pokemon-habitat/sea/",
+    "https://pokeapi.co/api/v2/pokemon-habitat/waters-edge/",
+    "https://pokeapi.co/api/v2/pokemon-habitat/rough-terrain/",
+    "https://pokeapi.co/api/v2/pokemon-habitat/mountain/",
+    "https://pokeapi.co/api/v2/pokemon-habitat/grassland/",
+    "https://pokeapi.co/api/v2/pokemon-habitat/forest/",
+    "https://pokeapi.co/api/v2/pokemon-habitat/urban/",
+]

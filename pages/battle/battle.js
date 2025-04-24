@@ -1,9 +1,9 @@
 import { playMainMusic } from "../../music.js";
 import { getRandomInt, loadPage, loadPokemonList, onWindowResize } from "../../utilities.js";
-import { battlePokemon, battle, myPokemonKey, selectedPokemon, allPokemon, victoryMusic, mainPage, battleMusic, battleBackground, starterPage, attackTypeTable } from "../../constants.js";
+import { battlePokemon, battle, myPokemonKey, selectedPokemon, allPokemon, victoryMusic, mainPage, battleMusic, starterPage, attackTypeTable } from "../../constants.js";
 
 import { manageSelection, pushLog, initAttacks, initSelection, toggleAttacks, disableSelection, pokeBallsInit, managePokeBalls } from "./scripts/controls.js";
-import { clearRect,  drawPlayer1Pokemon, drawPlayer2Pokemon, drawPokemonHealth, drawPokemonUI, loadPokemonImages, loadPokemonUI, setBackground, waitLoadFonts } from "./scripts/draw.js";
+import { clearRect,  drawPlayer1Pokemon, drawPlayer2Pokemon, drawPokemonHealth, drawPokemonUI, loadPokemonImages, loadPokemonUI, waitLoadFonts } from "./scripts/draw.js";
 
 const body = document.getElementById("body")
 const loading = document.getElementById("loading")
@@ -33,15 +33,13 @@ async function setup() {
     }
 
     backgroundMusic = await playMainMusic(battleMusic)
-    await backgroundMusic.play()
+    //await backgroundMusic.play()
 
     const battleSettings = JSON.parse(battleSettingsData)
     const parsedPokemonData = JSON.parse(localPokemonData)
 
     const player1Pokemon = await loadPokemonList(parsedPokemonData[selectedPokemon])
     const player2Pokemon = await loadPokemonList(battleSettings[battlePokemon])
-
-    await setBackground(battleSettings[battleBackground])
 
     await waitLoadFonts()
 

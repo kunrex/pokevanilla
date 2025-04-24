@@ -113,11 +113,16 @@ export async function initSelection(pokemonList) {
     }
 }
 
+const knockOut = "knock"
+
 export async function manageSelection(pokemonList, currentIndex) {
     for(let i = 0; i < pokemonList.length; i++) {
         const current = selection_options[i]
 
-        if(pokemonList[i].health <= 0  || i === currentIndex)
+        if(pokemonList[i].health <= 0) {
+            current.dataset.status = knockOut
+        }
+        else if(i === currentIndex)
             current.dataset.status = inactive
         else
             current.dataset.status = active
@@ -133,7 +138,6 @@ const back_to_home = document.getElementById('back_to_home')
 back_to_home.onclick = async () => {
     await loadPage(mainPage)
 }
-
 
 const pokeBalls = []
 const player2PokeBalls = document.getElementById('player_poke_balls')

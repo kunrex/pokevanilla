@@ -1,13 +1,6 @@
 import { loadImage } from "../../../utilities.js";
 import { showdownBack , showdownFront, gif } from "../../../constants.js";
 
-const backgrounds = ["backgrounds/battle.jpg", "backgrounds/water-battle.jpg"];
-
-const background = document.getElementById("background");
-export async function setBackground(index) {
-    await loadImage(background, backgrounds[index])
-}
-
 const canvasWidth = 1280, canvasHeight = 720
 
 const canvas = document.getElementById('world')
@@ -18,8 +11,8 @@ const ctx = canvas.getContext('2d')
 
 const player1Coords = [50, 575], player2Coords = [1000, 575]
 const player1UICoords = [450, 580] , player2UICoords = [700, 275]
-const player1TextCoords = [525, 640], player2TextCoords = [780, 335]
-const player1HealthCoords = [665, 650], player2HealthCoords = [910, 340]
+const player1TextCoords = [525, 640], player2TextCoords = [720, 310]
+const player1HealthCoords = [665, 650], player2HealthCoords = [880, 315]
 
 const player1Image = document.getElementById('player1')
 const player2Image = document.getElementById('player2')
@@ -70,7 +63,7 @@ export async function loadPokemonUI() {
 }
 
 async function drawUI(pokemon, healthUI, UICoordinates, textCoordinates) {
-    ctx.drawImage(player1Bar, 0, 0, healthUI.width, healthUI.height, UICoordinates[0], UICoordinates[1], healthUI.width * 2 / 3, healthUI.height * 2 / 3)
+    ctx.drawImage(healthUI, 0, 0, healthUI.width, healthUI.height, UICoordinates[0], UICoordinates[1], healthUI.width * 2 / 3, healthUI.height * 2 / 3)
 
     ctx.fillStyle = "#000000"
     ctx.fillText(pokemon.name, textCoordinates[0], textCoordinates[1])

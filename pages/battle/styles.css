@@ -207,7 +207,7 @@ body {
 }
 
 .pokemon_card {
-    height: 100%;
+    min-height: 8rem;
 
     display: flex;
     align-items: center;
@@ -226,6 +226,10 @@ body {
     cursor: pointer
 }
 
+.pokemon_card[data-status="knock"] {
+    color: darkred;
+}
+
 .pokemon_card[data-status="inactive"] {
     color: gray;
 }
@@ -233,8 +237,8 @@ body {
 #player_poke_balls {
     position: absolute;
 
-    top: 16.5rem;
-    right: 15rem;
+    top: 14.5rem;
+    right: 17rem;
 
     height: 3rem;
 }
