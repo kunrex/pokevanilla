@@ -40,5 +40,5 @@ export function maskIndex(x, y) {
 }
 
 export function canMove(x, y) {
-    return collisionMask[y][x] >= 0 && y > 0 && y < gridHeight && x > 0 && x < gridWidth
+    return collisionMask[y][x] >= 0
 }

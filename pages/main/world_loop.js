@@ -1,6 +1,6 @@
 import { playMainMusic, playMoveSound } from "../../music.js";
 import { getRandomInt, loadPage, loadPokemon, onWindowResize } from "../../utilities.js";
-import { battleBackground,  battlePage, battlePokemon, battle, starterMusic, myPokemonKey, starterPage } from "../../constants.js";
+import { battleBackground, battlePage, battlePokemon, battle, starterMusic, myPokemonKey, starterPage, worldIndexKey } from "../../constants.js";
 
 import { canMove, maskIndex } from "./worlds/collision.js";
 import { clearCatch, setUpPokemonSelect, setUpCatch, generateRandomTrainer } from "./scripts/controls.js";
@@ -49,6 +49,10 @@ async function generateRandomOpponent(x, y) {
         await generateRandomTrainer()
 }
 
+function calculateWorldIndex(x, y) {
+    return 2 * (y >= gridHeight ? 1 : 0) +  (x >= gridWidth ? 1 : 0)
+}
+
 const timeOut = 60
 const actions = []
 
@@ -65,10 +69,12 @@ async function setup() {
     }
     catch (e) { }
 
+    const worldIndexData = JSON.parse(localStorage.getItem(worldIndexKey))
+    const xInit = worldIndexData === null ? gridWidth / 2 : worldIndexData["x"], yInit = worldIndexData === null ? gridHeight / 2 : worldIndexData["y"]
+
     await loadAllWorlds()
 
-    await drawWorld(0)
-    await drawPlayer(0, gridWidth / 2 * conversionRatio - 4, gridHeight / 2 * conversionRatio - 4)
+    await draw( 0, xInit, yInit)
 
     await setUpPokemonSelect()
 
@@ -82,38 +88,45 @@ async function setup() {
         if(standby)
             return
 
-        if(event.key === 'a') {
-            actions.push(0)
+        switch (event.key) {
+            case "a":
+            case "ArrowLeft":
+                actions.push(0)
+                break
+            case "d":
+            case "ArrowRight":
+                actions.push(1)
+                break
+            case "w":
+            case "ArrowUp":
+                actions.push(2)
+                break
+            case "s":
+            case "ArrowDown":
+                actions.push(3)
+                break
         }
-        else if(event.key === 'd') {
-            actions.push(1)
-        }
-        else if(event.key === 'w') {
-            actions.push(2)
-        }
-        else if(event.key === 's') {
-            actions.push(3)
-        }
-    });
+    })
 
-    await gameLoop(gridWidth / 2, gridHeight / 2, 0, 0)
+    await gameLoop(xInit, yInit, 0, calculateWorldIndex(xInit, yInit))
 }
 
-async function draw(worldIndex, spriteIndex, x, y) {
-    standby = true
+async function draw(spriteIndex, x, y) {
     clearRect()
+    const worldIndex = calculateWorldIndex(x, y)
+
+    const quotient = Math.floor(worldIndex / 2), remainder = worldIndex % 2
+    const xCanvas = (remainder === 0 ? x : x - gridWidth), yCanvas = (quotient === 0 ? y : y - gridHeight)
 
     await drawWorld(worldIndex)
-    await drawPlayer(spriteIndex, x * conversionRatio - 4, y * conversionRatio - 4)
-
-    await generateRandomOpponent(x, y)
-    standby = false
+    await drawPlayer(spriteIndex, xCanvas * conversionRatio - 4, yCanvas * conversionRatio - 4)
 }
 
 async function gameLoop(x, y, spriteIndex, worldIndex) {
     if(actions.length > 0) {
         const action = actions.shift()
 
+        standby = true
         switch (action)
         {
             case 0:
@@ -121,8 +134,7 @@ async function gameLoop(x, y, spriteIndex, worldIndex) {
                 {
                     x--
                     spriteIndex = 1
-                    await playMoveSound()
-                    await draw(worldIndex, spriteIndex, x, y)
+                    worldIndex = calculateWorldIndex(x, y)
                 }
                 break
             case 1:
@@ -130,8 +142,7 @@ async function gameLoop(x, y, spriteIndex, worldIndex) {
                 {
                     x++
                     spriteIndex = 2
-                    await playMoveSound()
-                    await draw(worldIndex, spriteIndex, x, y)
+                    worldIndex = calculateWorldIndex(x, y)
                 }
                 break
             case 2:
@@ -139,8 +150,7 @@ async function gameLoop(x, y, spriteIndex, worldIndex) {
                 {
                     y--
                     spriteIndex = 3
-                    await playMoveSound()
-                    await draw(worldIndex, spriteIndex, x, y)
+                    worldIndex = calculateWorldIndex(x, y)
                 }
                 break
             case 3:
@@ -148,8 +158,7 @@ async function gameLoop(x, y, spriteIndex, worldIndex) {
                 {
                     y++
                     spriteIndex = 0
-                    await playMoveSound()
-                    await draw(worldIndex, spriteIndex, x, y)
+                    worldIndex = calculateWorldIndex(x, y)
                 }
                 break
             default:
@@ -158,8 +167,21 @@ async function gameLoop(x, y, spriteIndex, worldIndex) {
                     [battlePokemon]: action
                 }))
 
+                localStorage.setItem(worldIndexKey, JSON.stringify({
+                    "x": x,
+                    "y": y
+                }))
+
                 await loadPage(battlePage)
+                break
         }
+
+        await playMoveSound()
+        await draw(spriteIndex, x, y)
+
+        await generateRandomOpponent(x, y)
+
+        standby = false
     }
 
     setTimeout(() => { gameLoop(x, y, spriteIndex, worldIndex).then() }, timeOut)

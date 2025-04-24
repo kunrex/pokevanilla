@@ -1,5 +1,9 @@
 import { pages, gif, showdownBack, showdownFront, avatar, audio, minWidth, minHeight } from "./constants.js";
 
+export function getRandom(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
 export function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
@@ -67,8 +71,7 @@ async function pushMoves(pokemon, moves) {
                 name: move.name.replace('-', ' '),
                 type: json.type.name,
                 power: power,
-                pp: json.pp,
-                description: json.effect_entries[0].effect.replace(/[\n\r\t]+/g, '')
+                description: json["effect_entries"][0].effect.replace(/[\n\r\t]+/g, '')
             })
         }
         catch (error)
@@ -92,7 +95,7 @@ export async function loadPokemon(identifier) {
         const json = await response.json()
 
         const pokemon = {
-            name: json["name"].toLowerCase(),
+            name: json["name"].replace('-', ' ').toLowerCase(),
         }
 
         pushTypes(pokemon, json["types"])
@@ -132,9 +135,6 @@ export function loadMusic(music) {
 export function onWindowResize(loading, body) {
     const width = window.innerWidth
     const height = window.innerHeight
-
-    console.log(width)
-    console.log(height)
 
     if(width < minWidth || height < minHeight) {
         body.style.display = "none"

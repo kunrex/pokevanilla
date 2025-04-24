@@ -1,6 +1,6 @@
 import { playMainMusic } from "../../music.js";
 import { getRandomInt, loadPage, loadPokemonList, onWindowResize } from "../../utilities.js";
-import { battlePokemon, battle, myPokemonKey, selectedPokemon, allPokemon, victoryMusic, mainPage, battleMusic, battleBackground, starterPage } from "../../constants.js";
+import { battlePokemon, battle, myPokemonKey, selectedPokemon, allPokemon, victoryMusic, mainPage, battleMusic, battleBackground, starterPage, attackTypeTable } from "../../constants.js";
 
 import { manageSelection, pushLog, initAttacks, initSelection, toggleAttacks, disableSelection, pokeBallsInit, managePokeBalls } from "./scripts/controls.js";
 import { clearRect,  drawPlayer1Pokemon, drawPlayer2Pokemon, drawPokemonHealth, drawPokemonUI, loadPokemonImages, loadPokemonUI, setBackground, waitLoadFonts } from "./scripts/draw.js";
@@ -10,8 +10,14 @@ const loading = document.getElementById("loading")
 
 body.style.display = "none"
 
-function calcDamage(power, attacker, defender) {
-    return (2.4 * power * attacker.attack / (defender.defense + 1e-6)) / 50 + 2
+function calcDamage(move, attacker, defender) {
+    const isCritical = getRandomInt(0, 4) === 4
+
+    let typeModifier = 1
+    for(let i = 0 ;i < defender.types; i++)
+        typeModifier *= attackTypeTable[move.type][defender.types[i]]
+
+    return ((2.4 * move.power * attacker.attack / (defender.defense + 1e-6)) / 50 + 2) * (isCritical ? 1.5 : 1) * (typeModifier)
 }
 
 let backgroundMusic
@@ -125,7 +131,7 @@ async function manageAttack(attacker, defender, actionIndex, logIndex) {
         return
     }
 
-    const damage = calcDamage(attack.power, attacker, defender)
+    const damage = calcDamage(attack, attacker, defender)
 
     defender.health -= damage
     pushLog(`${attacker.name} used ${attack.name} and it did ${Math.floor(damage)} damage!`, logIndex)
