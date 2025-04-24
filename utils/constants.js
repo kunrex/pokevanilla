@@ -26,11 +26,11 @@ export const battle = "battle", battlePokemon = "battlePokemon"
 export const starterMusic = "starter", battleMusic = "battleMusic", victoryMusic = "victoryMusic", click = "click", moveSound = "move"
 
 export const audio = {
-    [starterMusic] : "../../audio/starter.ogg",
-    [battleMusic] : "../../audio/battle.ogg",
-    [victoryMusic]: "../../audio/victory.ogg",
-    [click]:  "../../audio/click.mp3",
-    [moveSound]: "../../audio/move.mp3",
+    [starterMusic] : "../../assets/audio/starter.ogg",
+    [battleMusic] : "../../assets/audio/battle.ogg",
+    [victoryMusic]: "../../assets/audio/victory.ogg",
+    [click]:  "../../assets/audio/click.mp3",
+    [moveSound]: "../../assets/audio/move.mp3",
 }
 
 export const active = "active", inactive = "inactive"

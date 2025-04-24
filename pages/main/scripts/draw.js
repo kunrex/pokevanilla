@@ -1,4 +1,4 @@
-import { loadImage } from "../../../utilities.js";
+import { loadImage } from "../../../utils/utilities.js";
 
 const worlds = ["worlds/world1.png", "worlds/world2.png", "worlds/world3.png", "worlds/world4.png"];
 
@@ -46,12 +46,18 @@ const playerSprites = [
     "sprites/tile12.png",
 ]
 
+const boat = document.getElementById("boat")
+
 let currentPlayerSpriteIndex = -1
-export async function drawPlayer(spriteIndex, x, y) {
+export async function drawPlayer(spriteIndex, x, y, onWater) {
     if(spriteIndex !== currentPlayerSpriteIndex)
     {
         currentPlayerSpriteIndex = spriteIndex
         await loadImage(player, playerSprites[currentPlayerSpriteIndex])
+    }
+
+    if(onWater) {
+        ctx.drawImage(boat, 0, 0, boat.width, boat.height, x, y + 24, playerWidth, boat.height * playerHeight / boat.width)
     }
 
     ctx.drawImage(player, 0, 0, player.width, player.height, x, y, playerWidth, playerHeight)

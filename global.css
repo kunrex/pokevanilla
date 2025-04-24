@@ -21,17 +21,17 @@
 
 @font-face {
     font-family: 'RetroFont';
-    src: url('fonts/retro.ttf') format('truetype');
+    src: url('assets/fonts/retro.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'Roboto';
-    src: url('fonts/roboto.ttf') format('truetype');
+    src: url('assets/fonts/roboto.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'RobotoThin';
-    src: url('fonts/roboto-thin.ttf') format('truetype');
+    src: url('assets/fonts/roboto-thin.ttf') format('truetype');
 }
 
 #volume {
@@ -83,4 +83,16 @@
 .overflow_y {
     overflow-x: hidden;
     overflow-y: auto;
+}
+
+#pc_warning {
+    position: fixed;
+
+    margin-left: 1rem;
+
+    right: 1rem;
+    bottom: 1rem;
+
+    font-size: 1rem;
+    font-family: RetroFont, sans-serif;
 }

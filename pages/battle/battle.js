@@ -1,17 +1,19 @@
-import { playMainMusic } from "../../music.js";
-import { getRandomInt, loadPage, loadPokemonList, onWindowResize } from "../../utilities.js";
-import { battlePokemon, battle, myPokemonKey, selectedPokemon, allPokemon, victoryMusic, mainPage, battleMusic, starterPage, attackTypeTable } from "../../constants.js";
+import { playMainMusic } from "../../utils/music.js";
+import { getRandom, getRandomInt, loadPage, loadPokemonList, onWindowResize } from "../../utils/utilities.js";
+import { battlePokemon, battle, myPokemonKey, selectedPokemon, allPokemon, victoryMusic, mainPage, battleMusic, starterPage, attackTypeTable } from "../../utils/constants.js";
 
 import { manageSelection, pushLog, initAttacks, initSelection, toggleAttacks, disableSelection, pokeBallsInit, managePokeBalls } from "./scripts/controls.js";
 import { clearRect,  drawPlayer1Pokemon, drawPlayer2Pokemon, drawPokemonHealth, drawPokemonUI, loadPokemonImages, loadPokemonUI, waitLoadFonts } from "./scripts/draw.js";
 
 const body = document.getElementById("body")
 const loading = document.getElementById("loading")
+const warning = document.getElementById("pc_warning")
 
 body.style.display = "none"
+warning.style.display = "none"
 
 function calcBaseDamage(move, attacker, defender) {
-    return ((2.4 * move.power * attacker.attack / (defender.defense + 1e-6)) / 50 + 2)
+    return ((2.4 * move.power * attacker.attack / (defender.defense + 1e-6)) / 50 + 2) * getRandom(0.85, 1)
 }
 
 let backgroundMusic
@@ -27,7 +29,11 @@ async function setup() {
     }
 
     backgroundMusic = await playMainMusic(battleMusic)
-    //await backgroundMusic.play()
+    try
+    {
+        await backgroundMusic.play()
+    }
+    catch (e) { }
 
     const battleSettings = JSON.parse(battleSettingsData)
     const parsedPokemonData = JSON.parse(localPokemonData)
@@ -170,8 +176,6 @@ async function manageBattleWin() {
             await pushLog(`You've successfully caught ${pokemon[0]}!`, 0)
         }
     }
-
-    localStorage.setItem(battle, null)
 }
 
 let standby = false
@@ -243,7 +247,9 @@ async function gameLoop(player1Index, player2Index, player1Pokemon, player2Pokem
                 else
                     await pushLog("You Lose", 1)
 
+                localStorage.setItem(battle, null)
                 await new Promise(r => setTimeout(r, 8000))
+
                 await loadPage(mainPage)
             }
         }
@@ -258,7 +264,7 @@ async function gameLoop(player1Index, player2Index, player1Pokemon, player2Pokem
 }
 
 window.onresize = () => {
-    onWindowResize(loading, body)
+    onWindowResize(loading, body, warning)
 }
 
 setup().then()

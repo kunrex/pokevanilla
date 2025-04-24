@@ -1,8 +1,8 @@
-import { allPokemon, avatar, maxTrainerPokemon, minTrainerPokemon, myPokemonKey, pokemonCount, selectedPokemon } from "../../../constants.js";
+import { allPokemon, avatar, maxTrainerPokemon, minTrainerPokemon, myPokemonKey, pokemonCount, selectedPokemon } from "../../../utils/constants.js";
 
 import { loadBattle } from "../world_loop.js";
-import { playButtonClick } from "../../../music.js";
-import { getRandomInt, loadImage, loadPokemonList } from "../../../utilities.js";
+import { playButtonClick } from "../../../utils/music.js";
+import { getRandomInt, loadImage, loadPokemonList } from "../../../utils/utilities.js";
 
 const catchButton = document.getElementById("catch")
 catchButton.disabled = true

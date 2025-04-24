@@ -1,8 +1,8 @@
-import {active, gif, inactive, mainPage} from "../../../constants.js";
+import {active, battle, gif, inactive, mainPage} from "../../../utils/constants.js";
 
 import { pushAction } from "../battle.js";
-import { loadPage } from "../../../utilities.js";
-import { playButtonClick } from "../../../music.js";
+import { loadPage } from "../../../utils/utilities.js";
+import { playButtonClick } from "../../../utils/music.js";
 
 function getAttackButtons() {
     const attackStr = "attack"
@@ -136,6 +136,7 @@ export function disableSelection() {
 
 const back_to_home = document.getElementById('back_to_home')
 back_to_home.onclick = async () => {
+    localStorage.setItem(battle, null)
     await loadPage(mainPage)
 }
 

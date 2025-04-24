@@ -1,5 +1,5 @@
-import { loadImage } from "../../../utilities.js";
-import { showdownBack , showdownFront, gif } from "../../../constants.js";
+import { loadImage } from "../../../utils/utilities.js";
+import { showdownBack , showdownFront, gif } from "../../../utils/constants.js";
 
 const canvasWidth = 1280, canvasHeight = 720
 

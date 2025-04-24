@@ -131,16 +131,20 @@ export function loadMusic(music) {
     return file
 }
 
-export function onWindowResize(loading, body) {
+export function onWindowResize(loading, body, warning) {
     const width = window.innerWidth
     const height = window.innerHeight
 
     if(width < minWidth || height < minHeight) {
         body.style.display = "none"
+
         loading.style.display = "block"
+        warning.style.display = "block"
     }
     else {
         body.style.display = "block"
+
         loading.style.display = "none"
+        warning.style.display = "none"
     }
 }

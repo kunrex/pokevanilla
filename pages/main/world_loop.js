@@ -1,6 +1,6 @@
-import { playMainMusic, playMoveSound } from "../../music.js";
-import { getRandomInt, loadPage, loadPokemon, onWindowResize } from "../../utilities.js";
-import { battlePage, battlePokemon, battle, starterMusic, myPokemonKey, starterPage, worldIndexKey, terrainIndexes, worldRequests } from "../../constants.js";
+import { playMainMusic, playMoveSound } from "../../utils/music.js";
+import { getRandomInt, loadPage, loadPokemon, onWindowResize } from "../../utils/utilities.js";
+import { battlePage, battlePokemon, battle, starterMusic, myPokemonKey, starterPage, worldIndexKey, terrainIndexes, worldRequests, wtr, sea } from "../../utils/constants.js";
 
 import { canMove, maskIndex } from "./worlds/collision.js";
 import { clearCatch, setUpPokemonSelect, setUpCatch, generateRandomTrainer } from "./scripts/controls.js";
@@ -12,8 +12,10 @@ export async function loadBattle(pokemonNames) {
 
 const body = document.getElementById("body")
 const loading = document.getElementById("loading")
+const warning = document.getElementById("pc_warning")
 
 body.style.display = "none"
+warning.style.display = "none"
 
 const terrainBasedPokemon = []
 async function loadPokemonFromHabitat(url) {
@@ -122,7 +124,9 @@ async function draw(spriteIndex, x, y) {
     const xCanvas = (remainder === 0 ? x : x - gridWidth), yCanvas = (quotient === 0 ? y : y - gridHeight)
 
     await drawWorld(worldIndex)
-    await drawPlayer(spriteIndex, xCanvas * conversionRatio - 4, yCanvas * conversionRatio - 4)
+
+    const mask = maskIndex(x, y)
+    await drawPlayer(spriteIndex, xCanvas * conversionRatio - 4, yCanvas * conversionRatio - 8, mask === wtr || mask === sea)
 }
 
 async function gameLoop(x, y, spriteIndex, worldIndex) {
@@ -202,7 +206,7 @@ async function gameLoop(x, y, spriteIndex, worldIndex) {
 }
 
 window.onresize = () => {
-    onWindowResize(loading, body)
+    onWindowResize(loading, body, warning)
 }
 
 setup().then()

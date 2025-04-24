@@ -1,11 +1,13 @@
-import { playButtonClick, playMainMusic } from "../../music.js";
-import { loadPage, loadPokemonList, onWindowResize } from "../../utilities.js";
-import { starters, gif, mainPage, myPokemonKey, allPokemon, selectedPokemon, starterMusic } from "../../constants.js";
+import { playButtonClick, playMainMusic } from "../../utils/music.js";
+import { loadPage, loadPokemonList, onWindowResize } from "../../utils/utilities.js";
+import { starters, gif, mainPage, myPokemonKey, allPokemon, selectedPokemon, starterMusic } from "../../utils/constants.js";
 
 const body = document.getElementById("body");
 const loading = document.getElementById("loading")
+const warning = document.getElementById("pc_warning")
 
 body.style.display = "none"
+warning.style.display = "none"
 
 const pokemon = await loadPokemonList(starters)
 
@@ -99,5 +101,5 @@ backButton.onclick = async () => {
 playMainMusic(starterMusic).then()
 
 window.onresize = () => {
-    onWindowResize(loading, body)
+    onWindowResize(loading, body, warning)
 }
