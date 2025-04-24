@@ -72,3 +72,7 @@ button:disabled {
 .starter_card[data-status="inactive"] {
     border-color: transparent;
 }
+
+.starter_card:hover {
+    cursor: pointer;
+}

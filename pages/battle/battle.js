@@ -1,27 +1,8 @@
 import { playMainMusic } from "../../music.js";
-import { getRandomInt, loadPage, loadPokemonList } from "../../utilities.js";
-import {
-    battlePokemon,
-    battle,
-    myPokemonKey,
-    selectedPokemon,
-    allPokemon,
-    victoryMusic,
-    mainPage,
-    battleMusic,
-    battleBackground,
-    starterPage
-} from "../../constants.js";
+import { getRandomInt, loadPage, loadPokemonList, onWindowResize } from "../../utilities.js";
+import { battlePokemon, battle, myPokemonKey, selectedPokemon, allPokemon, victoryMusic, mainPage, battleMusic, battleBackground, starterPage } from "../../constants.js";
 
-import {
-    manageSelection,
-    pushLog,
-    initAttacks,
-    initSelection,
-    toggleAttacks,
-    disableSelection,
-    pokeBallsInit, managePokeBalls
-} from "./scripts/controls.js";
+import { manageSelection, pushLog, initAttacks, initSelection, toggleAttacks, disableSelection, pokeBallsInit, managePokeBalls } from "./scripts/controls.js";
 import { clearRect,  drawPlayer1Pokemon, drawPlayer2Pokemon, drawPokemonHealth, drawPokemonUI, loadPokemonImages, loadPokemonUI, setBackground, waitLoadFonts } from "./scripts/draw.js";
 
 const body = document.getElementById("body")
@@ -270,6 +251,10 @@ async function gameLoop(player1Index, player2Index, player1Pokemon, player2Pokem
     }
     else
         setTimeout(() => { gameLoop(player1Index, player2Index, player1Pokemon, player2Pokemon).then()  }, timeout)
+}
+
+window.onresize = () => {
+    onWindowResize(loading, body)
 }
 
 setup().then()

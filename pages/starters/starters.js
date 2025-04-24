@@ -1,5 +1,5 @@
-import { loadPage, loadPokemonList } from "../../utilities.js";
 import { playButtonClick, playMainMusic } from "../../music.js";
+import { loadPage, loadPokemonList, onWindowResize } from "../../utilities.js";
 import { starters, gif, mainPage, myPokemonKey, allPokemon, selectedPokemon, starterMusic } from "../../constants.js";
 
 const body = document.getElementById("body");
@@ -97,3 +97,7 @@ backButton.onclick = async () => {
 }
 
 playMainMusic(starterMusic).then()
+
+window.onresize = () => {
+    onWindowResize(loading, body)
+}

@@ -1,4 +1,4 @@
-import { pages, gif, showdownBack, showdownFront, avatar, audio } from "./constants.js";
+import { pages, gif, showdownBack, showdownFront, avatar, audio, minWidth, minHeight } from "./constants.js";
 
 export function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
@@ -107,11 +107,15 @@ export async function loadPokemon(identifier) {
     }
 }
 
+const apiDelay = new Promise(r => setTimeout(r, 100))
 export async function loadPokemonList(list) {
     let final = []
 
     for (let i = 0; i < list.length; i++)
+    {
         final.push(await loadPokemon(list[i]))
+        await apiDelay
+    }
 
     return final
 }
@@ -123,4 +127,21 @@ export function loadMusic(music) {
     file.loop = true
 
     return file
+}
+
+export function onWindowResize(loading, body) {
+    const width = window.innerWidth
+    const height = window.innerHeight
+
+    console.log(width)
+    console.log(height)
+
+    if(width < minWidth || height < minHeight) {
+        body.style.display = "none"
+        loading.style.display = "block"
+    }
+    else {
+        body.style.display = "block"
+        loading.style.display = "none"
+    }
 }

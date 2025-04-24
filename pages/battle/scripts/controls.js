@@ -143,6 +143,7 @@ export async function pokeBallsInit(count) {
         pokeBall.src = "ui/pokeball.png"
 
         player2PokeBalls.appendChild(pokeBall)
+        pokeBalls.push(pokeBall)
     }
 }
 

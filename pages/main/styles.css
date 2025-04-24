@@ -148,6 +148,10 @@ body {
     width: 3.5rem;
 }
 
+.pokemon_avatar:hover {
+    cursor: pointer
+}
+
 #instructions_parent {
     margin-top: 1rem;
 }

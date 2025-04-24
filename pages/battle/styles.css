@@ -144,6 +144,10 @@ body {
     color: black;
 }
 
+.attack[data-status="active"]:hover {
+    cursor: pointer;
+}
+
 .attack[data-status="inactive"] {
     color: gray;
     border-color: gray;
@@ -216,6 +220,10 @@ body {
 
 .pokemon_card[data-status="active"] {
     color: black
+}
+
+.pokemon_card[data-status="active"]:hover {
+    cursor: pointer
 }
 
 .pokemon_card[data-status="inactive"] {

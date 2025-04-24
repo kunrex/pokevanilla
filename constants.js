@@ -37,3 +37,5 @@ export const active = "active", inactive = "inactive"
 
 export const minTrainerPokemon = 3, maxTrainerPokemon = 6
 export const pokemonCount = 500
+
+export const minWidth = 1600, minHeight = 900
