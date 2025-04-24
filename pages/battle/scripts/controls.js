@@ -149,6 +149,6 @@ export async function pokeBallsInit(count) {
 export async function managePokeBalls(pokemon) {
     for(let i = 0; i < pokemon.length; i++) {
         if(pokemon[i].health <= 0)
-            pokeBalls[i].src = ""
+            pokeBalls[i].src = "ui/pokeball-disabled.png"
     }
 }

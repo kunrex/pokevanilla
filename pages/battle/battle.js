@@ -46,7 +46,7 @@ async function setup() {
     }
 
     backgroundMusic = await playMainMusic(battleMusic)
-    //await backgroundMusic.play()
+    await backgroundMusic.play()
 
     const battleSettings = JSON.parse(battleSettingsData)
     const parsedPokemonData = JSON.parse(localPokemonData)

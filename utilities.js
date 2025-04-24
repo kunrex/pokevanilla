@@ -78,7 +78,7 @@ async function pushMoves(pokemon, moves) {
     pokemon.moves = actualMoves
 }
 
-async function loadPokemon(identifier) {
+export async function loadPokemon(identifier) {
 
     const url = `https://pokeapi.co/api/v2/pokemon/${identifier}`
 

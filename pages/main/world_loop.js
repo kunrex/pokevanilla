@@ -1,14 +1,6 @@
 import { playMainMusic, playMoveSound } from "../../music.js";
-import { getRandomInt, loadPage, loadPokemonList } from "../../utilities.js";
-import {
-    battleBackground,
-    battlePage,
-    battlePokemon,
-    battle,
-    starterMusic,
-    myPokemonKey,
-    starterPage
-} from "../../constants.js";
+import { getRandomInt, loadPage, loadPokemon } from "../../utilities.js";
+import { battleBackground,  battlePage, battlePokemon, battle, starterMusic, myPokemonKey, starterPage } from "../../constants.js";
 
 import { canMove, maskIndex } from "./worlds/collision.js";
 import {clearCatch, setUpPokemonSelect, setUpCatch, generateRandomTrainer} from "./scripts/controls.js";
@@ -34,22 +26,17 @@ async function loadPokemonFromHabitat(url, collection) {
     const json = await response.json()
     const allPokemon = json["pokemon_species"]
 
-    const names = []
     for(let i = 0; i < allPokemon.length; i++)
-        names.push(allPokemon[i].name)
-
-    const pokemon = await loadPokemonList(names)
-    for(let i = 0; i < pokemon.length; i++)
-        collection.push(pokemon[i])
+        collection.push(allPokemon[i].name)
 }
 
 async function generateRandomPokemon(x, y) {
     const index = maskIndex(x, y)
 
     if (index > 0)
-        await setUpCatch(grassLandPokemon[getRandomInt(0, grassLandPokemon.length)])
+        await setUpCatch(await loadPokemon(grassLandPokemon[getRandomInt(0, grassLandPokemon.length)]))
     else
-        await setUpCatch(watersEdgePokemon[getRandomInt(0, watersEdgePokemon.length)])
+        await setUpCatch(await loadPokemon(watersEdgePokemon[getRandomInt(0, watersEdgePokemon.length)]))
 }
 
 async function generateRandomOpponent(x, y) {
