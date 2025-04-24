@@ -171,14 +171,19 @@ async function manageBattleWin() {
 
     if(pokemon.length === 1) {
         const names = pokemonData[allPokemon]
-        names.push(pokemon[0].toLowerCase())
+        const name = pokemon[0].toLowerCase()
 
-        localStorage.setItem(myPokemonKey, JSON.stringify({
-            [allPokemon] : names,
-            [selectedPokemon] : pokemonData[selectedPokemon]
-        }))
+        if(names.indexOf(name) < 0)
+        {
+            names.push(name)
 
-        await pushLog(`You've successfully caught ${pokemon[0]}!`, 0)
+            localStorage.setItem(myPokemonKey, JSON.stringify({
+                [allPokemon] : names,
+                [selectedPokemon] : pokemonData[selectedPokemon]
+            }))
+
+            await pushLog(`You've successfully caught ${pokemon[0]}!`, 0)
+        }
     }
 
     localStorage.setItem(battle, null)
