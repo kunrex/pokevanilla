@@ -10,14 +10,8 @@ const loading = document.getElementById("loading")
 
 body.style.display = "none"
 
-function calcDamage(move, attacker, defender) {
-    const isCritical = getRandomInt(0, 4) === 4
-
-    let typeModifier = 1
-    for(let i = 0 ;i < defender.types; i++)
-        typeModifier *= attackTypeTable[move.type][defender.types[i]]
-
-    return ((2.4 * move.power * attacker.attack / (defender.defense + 1e-6)) / 50 + 2) * (isCritical ? 1.5 : 1) * (typeModifier)
+function calcBaseDamage(move, attacker, defender) {
+    return ((2.4 * move.power * attacker.attack / (defender.defense + 1e-6)) / 50 + 2)
 }
 
 let backgroundMusic
@@ -129,10 +123,16 @@ async function manageAttack(attacker, defender, actionIndex, logIndex) {
         return
     }
 
-    const damage = calcDamage(attack, attacker, defender)
+    const isCritical = getRandomInt(0, 4) === 1
+
+    let typeModifier = 1
+    for(let i = 0 ;i < defender.types; i++)
+        typeModifier *= attackTypeTable[attack.type][defender.types[i]]
+
+    const damage = calcBaseDamage(attack, attacker, defender) * (isCritical ? 1.5 : 1) * typeModifier
 
     defender.health -= damage
-    pushLog(`${attacker.name} used ${attack.name} and it did ${Math.floor(damage)} damage!`, logIndex)
+    pushLog(`${attacker.name} used ${attack.name}${isCritical ? ", it was super effective! It did " : " and it did "}${Math.floor(damage)} damage!`, logIndex)
 }
 
 async function draw(pokemon1, pokemon2) {

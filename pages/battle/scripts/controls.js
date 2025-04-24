@@ -40,7 +40,7 @@ export function initAttacks(pokemon) {
 
         const titleContainer = background.children[0]
         titleContainer.children[0].innerText = move.name
-        titleContainer.children[1].children[0].innerText = move.description
+        titleContainer.children[1].children[0].innerText = `${move.type} type attack`
 
         button.dataset.status = active
         button.children[1].children[0].innerText = move.power

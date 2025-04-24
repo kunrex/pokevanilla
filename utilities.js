@@ -71,7 +71,6 @@ async function pushMoves(pokemon, moves) {
                 name: move.name.replace('-', ' '),
                 type: json.type.name,
                 power: power,
-                description: json["effect_entries"][0].effect.replace(/[\n\r\t]+/g, '')
             })
         }
         catch (error)
