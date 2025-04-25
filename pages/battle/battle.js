@@ -181,8 +181,8 @@ async function draw(pokemon1, pokemon2) {
 }
 
 async function tryEvolvePokemon(pokemonList) {
-    //if(getRandomInt(0, 100) > 10)
-        //return
+    if(getRandomInt(0, 100) > 10)
+        return
 
     await stopMusic()
     await playMusic(evolutionMusic)
