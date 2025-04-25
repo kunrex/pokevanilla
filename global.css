@@ -63,9 +63,12 @@
     position: fixed;
 
     margin-left: 1rem;
+    margin-right: 1rem;
 
-    right: 1rem;
     bottom: 1rem;
+
+    left: 50%;
+    transform: translate(-50%, 0);
 
     font-size: 1rem;
     font-family: RetroFont, sans-serif;

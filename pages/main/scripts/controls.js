@@ -57,7 +57,10 @@ export async function catchSetup(pokemon, onTryCatch) {
     catchAlert.style.backgroundColor = color
     battleButton.style.backgroundColor = color
 
+    await loadImage(catchAlert.children[0], "sprites/loading.gif")
+    await new Promise(r => setTimeout(r, 1000))
     await loadImage(catchAlert.children[0], pokemon.sprites[avatar])
+
     catchAlert.children[1].innerText = pokemon.name
 
     battleButton.disabled = false
@@ -72,6 +75,7 @@ const trainerImages = [ "trainers/1.png", "trainers/2.png", "trainers/3.png", "t
 
 export async function trainerSetup(pokemon, onTryFight) {
     await loadImage(catchAlert.children[0], trainerImages[getRandomInt(0, 10)])
+
     catchAlert.children[1].innerText = ""
 
     battleButton.disabled = false
