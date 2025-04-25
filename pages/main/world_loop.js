@@ -107,8 +107,6 @@ const actions = []
 
 let standby = false
 async function setup() {
-    onWindowResize()
-
     await preLoadSFX([clickSFX, moveSFX])
     await preLoadMusic([starterMusic])
 
@@ -156,6 +154,8 @@ async function setup() {
                 break
         }
     })
+
+    onWindowResize(loading, body, warning)
 
     await gameLoop(xInit, yInit, 0)
 }

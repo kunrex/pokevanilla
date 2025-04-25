@@ -52,8 +52,6 @@ async function loadHome() {
 }
 
 async function setup() {
-    onWindowResize()
-
     await preLoadSFX([clickSFX, evolvedSFX])
     await preLoadMusic([lossMusic, battleMusic, victoryMusic, evolutionMusic])
 
@@ -98,6 +96,8 @@ async function setup() {
 
     body.style.display = "block"
     loading.style.display = "none"
+
+    onWindowResize(loading, body, warning)
 
     await gameLoop(0, 0, player1Pokemon, player2Pokemon)
 }
@@ -181,8 +181,8 @@ async function draw(pokemon1, pokemon2) {
 }
 
 async function tryEvolvePokemon(pokemonList) {
-    if(getRandomInt(0, 100) > 10)
-        return
+    //if(getRandomInt(0, 100) > 10)
+        //return
 
     await stopMusic()
     await playMusic(evolutionMusic)

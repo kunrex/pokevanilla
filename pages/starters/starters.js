@@ -72,8 +72,6 @@ async function starterCardsInit(pokemon) {
 }
 
 async function setUp() {
-    onWindowResize()
-
     await preLoadSFX([clickSFX])
     await preLoadMusic([starterMusic])
 
@@ -103,6 +101,8 @@ async function setUp() {
 
     warning.style.display = "none"
     loading.style.display = "none"
+
+    onWindowResize(loading, body, warning)
 }
 
 window.onresize = () => {
