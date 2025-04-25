@@ -80,6 +80,54 @@ async function pushMoves(pokemon, moves) {
     pokemon.moves = actualMoves
 }
 
+async function pushEvolution(pokemon) {
+    const url = `https://pokeapi.co/api/v2/pokemon-species/${pokemon}/`
+
+    try
+    {
+        const response = await fetch(url)
+        if (!response.ok)
+            return null
+
+        const evolutionChainURL = (await response.json())["evolution_chain"]["url"]
+
+        const evolutionResponse = await fetch(evolutionChainURL)
+        if(!evolutionResponse.ok)
+            return null
+
+        const json = await evolutionResponse.json()
+
+        let current = json["chain"]
+        while(true) {
+            let flag = false
+
+            const species = current["species"]["name"].toLowerCase()
+            if(species === pokemon)
+                flag = true
+
+            const evolutionDetails = current["evolves_to"]
+            if(evolutionDetails === null)
+                break
+
+            if(flag)
+            {
+                const evolutions = []
+                for(let i = 0; i < evolutionDetails.length; i++)
+                    evolutions.push(evolutionDetails[i]["species"]["name"].toLowerCase())
+
+                return evolutions
+            }
+
+            current = evolutionDetails
+        }
+
+        return null
+    }
+    catch (error) {
+        return null
+    }
+}
+
 export async function loadPokemon(identifier) {
 
     const url = `https://pokeapi.co/api/v2/pokemon/${identifier}`
@@ -96,6 +144,8 @@ export async function loadPokemon(identifier) {
         const pokemon = {
             name: json["name"].replace('-', ' ').toLowerCase(),
         }
+
+        pokemon.evolution = await pushEvolution(pokemon.name)
 
         pushTypes(pokemon, json["types"])
         pushStats(pokemon, json["stats"])

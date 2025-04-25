@@ -1,7 +1,7 @@
 import {active, battle, gif, inactive, mainPage} from "../../../utils/constants.js";
 
 import { pushAction } from "../battle.js";
-import { loadPage } from "../../../utils/utilities.js";
+import {loadImage, loadPage} from "../../../utils/utilities.js";
 import { playButtonClick } from "../../../utils/music.js";
 
 function getAttackButtons() {
@@ -157,4 +157,65 @@ export async function managePokeBalls(pokemon) {
         if(pokemon[i].health <= 0)
             pokeBalls[i].src = "ui/pokeball-disabled.png"
     }
+}
+
+const evolutionTab = document.getElementById("pokemon_evolve")
+evolutionTab.style.display = "none"
+
+const evolve = document.getElementById("evolve")
+const dontEvolve = document.getElementById("dont_evolve")
+
+function capitalise(val) {
+    return val.charAt(0).toUpperCase() + val.slice(1);
+}
+
+export async function showEvolutionInit(pokemon, evolution, onSelectEvolve, onDeselectEvolve) {
+    evolutionTab.style.backgroundColor = `var(--color-${pokemon.types[0]})`
+
+    const heading = evolutionTab.children[0].children[0]
+    heading.innerHTML = `${capitalise(pokemon.name)} is ready to evolve into ${capitalise(evolution.name)}!`
+
+    const img = evolutionTab.children[0].children[1]
+
+    await loadImage(img, evolution.sprites[gif])
+    await loadImage(img, pokemon.sprites[gif])
+
+    img.dataset.status = inactive
+
+    evolve.onclick = async () => {
+        evolve.disabled = true
+        dontEvolve.disabled = true
+
+        img.dataset.status = active
+        await new Promise(r => setTimeout(r, 2000))
+
+        img.style.display = "none"
+        img.dataset.status = inactive
+        await loadImage(img, evolution.sprites[gif])
+
+        evolutionTab.style.backgroundColor = `var(--color-${evolution.types[0]})`
+        img.style.display = "block"
+
+        heading.innerHTML = `${capitalise(pokemon.name)} has evolved into ${capitalise(evolution.name)}!`
+
+        onSelectEvolve()
+
+        setTimeout(() => {
+            evolutionTab.style.display = "none"
+
+            img.src = ""
+            heading.innerHTML = ""
+        }, 3000)
+    }
+
+    dontEvolve.onclick = () => {
+        evolutionTab.style.display = "none"
+
+        img.src = ""
+        heading.innerHTML = ""
+
+        onDeselectEvolve()
+    }
+
+    evolutionTab.style.display = "block"
 }

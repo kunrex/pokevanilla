@@ -1,8 +1,25 @@
 import { playMainMusic } from "../../utils/music.js";
-import { getRandom, getRandomInt, loadPage, loadPokemonList, onWindowResize } from "../../utils/utilities.js";
+import {
+    getRandom,
+    getRandomInt,
+    loadPage,
+    loadPokemon,
+    loadPokemonList,
+    onWindowResize
+} from "../../utils/utilities.js";
 import { battlePokemon, battle, myPokemonKey, selectedPokemon, allPokemon, victoryMusic, mainPage, battleMusic, starterPage, attackTypeTable } from "../../utils/constants.js";
 
-import { manageSelection, pushLog, initAttacks, initSelection, toggleAttacks, disableSelection, pokeBallsInit, managePokeBalls } from "./scripts/controls.js";
+import {
+    manageSelection,
+    pushLog,
+    initAttacks,
+    initSelection,
+    toggleAttacks,
+    disableSelection,
+    pokeBallsInit,
+    managePokeBalls,
+    showEvolutionInit
+} from "./scripts/controls.js";
 import { clearRect,  drawPlayer1Pokemon, drawPlayer2Pokemon, drawPokemonHealth, drawPokemonUI, loadPokemonImages, loadPokemonUI, waitLoadFonts } from "./scripts/draw.js";
 
 const body = document.getElementById("body")
@@ -21,11 +38,13 @@ async function setup() {
     const battleSettingsData = localStorage.getItem(battle)
     const localPokemonData = localStorage.getItem(myPokemonKey)
 
-    if(localPokemonData === null) {
+    if(localPokemonData === "null") {
         await loadPage(starterPage)
+        return
     }
-    if(battleSettingsData === null) {
+    if(battleSettingsData === "null") {
         await loadPage(mainPage)
+        return
     }
 
     backgroundMusic = await playMainMusic(battleMusic)
@@ -151,11 +170,72 @@ async function draw(pokemon1, pokemon2) {
     await drawPokemonUI(pokemon1, pokemon2)
 }
 
-async function manageBattleWin() {
+async function tryEvolveRandomPokemon(pokemonList) {
+    if(getRandomInt(0, 100) > 10)
+        return
+
+    let minimum = null
+    for(let i = 0; i < pokemonList.length; i++) {
+        if(pokemonList[i].evolution !== null)
+        {
+            if(minimum === null)
+                minimum = i
+            else if(pokemonList[i].health < pokemonList[minimum].health)
+                minimum = i
+        }
+    }
+
+    if(minimum === null)
+        return
+
+    const pokemon = pokemonList[minimum]
+    const evolution = await loadPokemon(pokemon.evolution[getRandomInt(0, pokemon.evolution.length)])
+
+    let flag = false
+    await showEvolutionInit(pokemon, evolution, () => {
+        const pokemonData = JSON.parse(localStorage.getItem(myPokemonKey));
+
+        const all = pokemonData[allPokemon]
+        const selected = pokemonData[selectedPokemon]
+
+        all.splice(all.indexOf(pokemon.name), 1)
+        selected.splice(selected.indexOf(pokemon.name), 1)
+
+        all.push(evolution.name)
+        selected.push(evolution.name)
+
+        localStorage.setItem(myPokemonKey, JSON.stringify({
+            [allPokemon] : all,
+            [selectedPokemon] : selected
+        }))
+
+        flag = true
+    }, () => {
+        flag = true
+    })
+
+    const timeOut = () =>
+        new Promise(r => {
+            const check = () => {
+                if (flag)
+                    r()
+                else
+                    setTimeout(check, 100)
+            };
+
+            check()
+        })
+
+    await timeOut();
+}
+
+async function manageBattleWin(pokemonList) {
     backgroundMusic.pause()
 
     backgroundMusic = await playMainMusic(victoryMusic)
     await backgroundMusic.play()
+
+    await tryEvolveRandomPokemon(pokemonList)
 
     const pokemonData = JSON.parse(localStorage.getItem(myPokemonKey));
     const pokemon = JSON.parse(localStorage.getItem(battle))[battlePokemon];
@@ -242,7 +322,7 @@ async function gameLoop(player1Index, player2Index, player1Pokemon, player2Pokem
                 if(player2Index < 0)
                 {
                     await pushLog("You Win!", 0)
-                    await manageBattleWin()
+                    await manageBattleWin(player1Pokemon)
                 }
                 else
                     await pushLog("You Lose", 1)
