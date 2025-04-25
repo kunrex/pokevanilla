@@ -122,11 +122,18 @@ export async function pokeBallsInit(count) {
     }
 }
 
-export async function managePokeBalls(pokemon) {
+export function managePokeBalls(pokemon) {
     for(let i = 0; i < pokemon.length; i++) {
-        if(pokemon[i].health <= 0)
+        if(pokemon[i].health > 0)
+            pokeBalls[i].src = "ui/poke_ball.png"
+        else
             pokeBalls[i].src = "ui/poke_ball-disabled.png"
     }
+}
+
+export function disablePokeBalls() {
+    for(let i = 0; i < pokeBalls.length; i++)
+        pokeBalls[i].src = ""
 }
 
 const back_to_home = document.getElementById('back_to_home')

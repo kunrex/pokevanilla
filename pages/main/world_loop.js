@@ -128,9 +128,6 @@ async function setup() {
     for(let i = 0; i < terrainIndexes.length; i++)
         terrainBasedPokemon.push(await loadPokemonFromHabitat(worldRequests[i]))
 
-    body.style.display = "block"
-    loading.style.display = "none"
-
     document.addEventListener('keydown', async function(event) {
         if(standby)
             return
@@ -246,6 +243,7 @@ async function gameLoop(x, y, spriteIndex) {
 
 window.onresize = () => {
     onWindowResize(loading, body, warning)
+    standby = loading.style.display === "block";
 }
 
 setup().then()

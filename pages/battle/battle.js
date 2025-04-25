@@ -20,7 +20,20 @@ import {
 } from "../../utils/constants.js";
 
 import { clearRect,  drawPlayer1Pokemon, drawPlayer2Pokemon, drawPokemonHealth, drawPokemonUI, loadPokemonImages, loadPokemonUI, waitLoadFonts } from "./scripts/draw.js";
-import { manageSelection, pushLog, initAttacks, initSelection, toggleAttacks, disableSelection, pokeBallsInit, managePokeBalls, showEvolutionInit, attackButtonsInit, backToHomeInit } from "./scripts/controls.js";
+import {
+    manageSelection,
+    pushLog,
+    initAttacks,
+    initSelection,
+    toggleAttacks,
+    disableSelection,
+    pokeBallsInit,
+    managePokeBalls,
+    showEvolutionInit,
+    attackButtonsInit,
+    backToHomeInit,
+    disablePokeBalls
+} from "./scripts/controls.js";
 
 const body = document.getElementById("body")
 const loading = document.getElementById("loading")
@@ -93,9 +106,6 @@ async function setup() {
     await pokeBallsInit(player2Pokemon.length)
 
     await backToHomeInit(loadHome)
-
-    body.style.display = "block"
-    loading.style.display = "none"
 
     onWindowResize(loading, body, warning)
 
@@ -257,17 +267,14 @@ async function manageBattleWin(pokemonList) {
         const names = pokemonData[allPokemonKey]
         const name = pokemon[0].toLowerCase()
 
-        if(names.indexOf(name) < 0)
-        {
-            names.push(name)
+        names.push(name)
 
-            localStorage.setItem(myPokemonKey, JSON.stringify({
-                [allPokemonKey] : names,
-                [selectedPokemonKey] : pokemonData[selectedPokemonKey]
-            }))
+        localStorage.setItem(myPokemonKey, JSON.stringify({
+            [allPokemonKey] : names,
+            [selectedPokemonKey] : pokemonData[selectedPokemonKey]
+        }))
 
-            await pushLog(`You've successfully caught ${pokemon[0]}!`, 0)
-        }
+        await pushLog(`You've successfully caught ${pokemon[0]}!`, 0)
     }
 }
 
@@ -284,6 +291,8 @@ async function gameLoop(player1Index, player2Index, player1Pokemon, player2Pokem
 
         disableSelection()
         toggleAttacks(4, true)
+
+        disablePokeBalls()
 
         const action = actions.shift()
 
@@ -331,8 +340,7 @@ async function gameLoop(player1Index, player2Index, player1Pokemon, player2Pokem
                 else
                     await toggleAttacks(player1Pokemon[player1Index].moves.length, false)
 
-                if(prevPlayer2Index !== player2Index)
-                    await managePokeBalls(player2Pokemon)
+                managePokeBalls(player2Pokemon)
             }
             else
             {

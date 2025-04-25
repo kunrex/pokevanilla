@@ -57,6 +57,8 @@ export async function catchSetup(pokemon, onTryCatch) {
     catchAlert.style.backgroundColor = color
     battleButton.style.backgroundColor = color
 
+    catchAlert.children[1].innerText = ""
+
     await loadImage(catchAlert.children[0], "sprites/loading.gif")
     await new Promise(r => setTimeout(r, 1000))
     await loadImage(catchAlert.children[0], pokemon.sprites[avatar])

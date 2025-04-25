@@ -9,8 +9,6 @@ const warning = document.getElementById("pc_warning")
 body.style.display = "none"
 warning.style.display = "none"
 
-loading.style.display = "block"
-
 const starterParent = document.getElementById("starters")
 
 const selected = []
@@ -96,11 +94,6 @@ async function setUp() {
 
         await loadPage(mainPage)
     }
-
-    body.style.display = "block"
-
-    warning.style.display = "none"
-    loading.style.display = "none"
 
     onWindowResize(loading, body, warning)
 }
