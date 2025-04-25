@@ -187,7 +187,7 @@ async function tryEvolvePokemon(pokemonList) {
 
     let minimum = null
     for(let i = 0; i < pokemonList.length; i++)
-        if(pokemonList[i].evolution !== null)
+        if(pokemonList[i].evolution !== null && pokemonList[i].evolution !== undefined)
             if(minimum === null || pokemonList[i].health < pokemonList[minimum].health)
                 minimum = i
 

@@ -81,7 +81,8 @@ export async function initSelection(pokemonList, onPokemonSelect) {
         node.appendChild(heading)
 
         node.onclick = async () => {
-            await onPokemonSelect(i + 4)
+            if(node.dataset.status === active)
+                await onPokemonSelect(i + 4)
         }
 
         selection_parent.appendChild(node)
