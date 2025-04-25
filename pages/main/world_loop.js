@@ -107,6 +107,8 @@ const actions = []
 
 let standby = false
 async function setup() {
+    onWindowResize()
+
     await preLoadSFX([clickSFX, moveSFX])
     await preLoadMusic([starterMusic])
 

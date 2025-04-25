@@ -52,6 +52,8 @@ async function loadHome() {
 }
 
 async function setup() {
+    onWindowResize()
+
     await preLoadSFX([clickSFX, evolvedSFX])
     await preLoadMusic([lossMusic, battleMusic, victoryMusic, evolutionMusic])
 

@@ -72,6 +72,8 @@ async function starterCardsInit(pokemon) {
 }
 
 async function setUp() {
+    onWindowResize()
+
     await preLoadSFX([clickSFX])
     await preLoadMusic([starterMusic])
 
