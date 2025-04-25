@@ -19,9 +19,8 @@ const player = document.getElementById("player")
 const background = document.getElementById("background")
 
 export async function loadAllWorlds() {
-    for(let i = 0; i < worlds.length; i++) {
+    for(let i = 0; i < worlds.length; i++)
         await loadImage(background, worlds[i])
-    }
 }
 
 export function clearRect() {
@@ -39,14 +38,8 @@ export async function drawWorld(worldIndex) {
     ctx.drawImage(background, 0, 0, background.width, background.height, 0, 0, canvasWidth, canvasHeight)
 }
 
-const playerSprites = [
-    "sprites/tile0.png",
-    "sprites/tile4.png",
-    "sprites/tile8.png",
-    "sprites/tile12.png",
-]
-
 const boat = document.getElementById("boat")
+const playerSprites = [ "sprites/tile0.png", "sprites/tile4.png", "sprites/tile8.png", "sprites/tile12.png", ]
 
 let currentPlayerSpriteIndex = -1
 export async function drawPlayer(spriteIndex, x, y, onWater) {
@@ -56,9 +49,8 @@ export async function drawPlayer(spriteIndex, x, y, onWater) {
         await loadImage(player, playerSprites[currentPlayerSpriteIndex])
     }
 
-    if(onWater) {
+    if(onWater)
         ctx.drawImage(boat, 0, 0, boat.width, boat.height, x, y + 24, playerWidth, boat.height * playerHeight / boat.width)
-    }
 
     ctx.drawImage(player, 0, 0, player.width, player.height, x, y, playerWidth, playerHeight)
 }

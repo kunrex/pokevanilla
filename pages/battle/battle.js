@@ -1,26 +1,26 @@
-import { playMainMusic } from "../../utils/music.js";
+import { playMusic, playSFX, preLoadMusic, preLoadSFX, stopMusic } from "../../utils/music.js";
+import { getRandom, getRandomInt, loadPage, loadPokemon, loadPokemonList, onWindowResize } from "../../utils/utilities.js";
 import {
-    getRandom,
-    getRandomInt,
-    loadPage,
-    loadPokemon,
-    loadPokemonList,
-    onWindowResize
-} from "../../utils/utilities.js";
-import { battlePokemon, battle, myPokemonKey, selectedPokemon, allPokemon, victoryMusic, mainPage, battleMusic, starterPage, attackTypeTable } from "../../utils/constants.js";
+    battlePokemon,
+    battleKey,
+    myPokemonKey,
+    selectedPokemonKey,
+    allPokemonKey,
+    victoryMusic,
+    mainPage,
+    battleMusic,
+    starterPage,
+    attackTypeTable,
+    clickSFX,
+    evolvedSFX,
+    evolutionMusic,
+    lossMusic,
+    loadAll,
+    loadTypes, loadSprites
+} from "../../utils/constants.js";
 
-import {
-    manageSelection,
-    pushLog,
-    initAttacks,
-    initSelection,
-    toggleAttacks,
-    disableSelection,
-    pokeBallsInit,
-    managePokeBalls,
-    showEvolutionInit
-} from "./scripts/controls.js";
 import { clearRect,  drawPlayer1Pokemon, drawPlayer2Pokemon, drawPokemonHealth, drawPokemonUI, loadPokemonImages, loadPokemonUI, waitLoadFonts } from "./scripts/draw.js";
+import { manageSelection, pushLog, initAttacks, initSelection, toggleAttacks, disableSelection, pokeBallsInit, managePokeBalls, showEvolutionInit, attackButtonsInit, backToHomeInit } from "./scripts/controls.js";
 
 const body = document.getElementById("body")
 const loading = document.getElementById("loading")
@@ -33,32 +33,43 @@ function calcBaseDamage(move, attacker, defender) {
     return ((2.4 * move.power * attacker.attack / (defender.defense + 1e-6)) / 50 + 2) * getRandom(0.85, 1)
 }
 
-let backgroundMusic
+let standby = false
+
+let actions = []
+export function pushAction(index) {
+    if(!standby)
+        actions.push(index)
+}
+
+async function onActionButtonClick(index) {
+    pushAction(index)
+    await playSFX(clickSFX)
+}
+
+async function loadHome() {
+    localStorage.setItem(battleKey, null)
+    await loadPage(mainPage)
+}
+
 async function setup() {
-    const battleSettingsData = localStorage.getItem(battle)
+    await preLoadSFX([clickSFX, evolvedSFX])
+    await preLoadMusic([lossMusic, battleMusic, victoryMusic, evolutionMusic])
+
+    const battleSettingsData = localStorage.getItem(battleKey)
     const localPokemonData = localStorage.getItem(myPokemonKey)
 
-    if(localPokemonData === "null") {
+    if(localPokemonData === "null")
         await loadPage(starterPage)
-        return
-    }
-    if(battleSettingsData === "null") {
+    if(battleSettingsData === "null")
         await loadPage(mainPage)
-        return
-    }
 
-    backgroundMusic = await playMainMusic(battleMusic)
-    try
-    {
-        await backgroundMusic.play()
-    }
-    catch (e) { }
+    await playMusic(battleMusic)
 
     const battleSettings = JSON.parse(battleSettingsData)
     const parsedPokemonData = JSON.parse(localPokemonData)
 
-    const player1Pokemon = await loadPokemonList(parsedPokemonData[selectedPokemon])
-    const player2Pokemon = await loadPokemonList(battleSettings[battlePokemon])
+    const player1Pokemon = await loadPokemonList(parsedPokemonData[selectedPokemonKey], loadAll)
+    const player2Pokemon = await loadPokemonList(battleSettings[battlePokemon], loadAll)
 
     await waitLoadFonts()
 
@@ -73,12 +84,15 @@ async function setup() {
     await drawPokemonHealth(player1Pokemon[0], player2Pokemon[0])
     await drawPokemonUI(player1Pokemon[0], player2Pokemon[0])
 
-    await pokeBallsInit(player2Pokemon.length)
-
+    await attackButtonsInit(onActionButtonClick)
     initAttacks(player1Pokemon[0])
 
-    await initSelection(player1Pokemon)
+    await initSelection(player1Pokemon, onActionButtonClick)
     await manageSelection(player1Pokemon, 0)
+
+    await pokeBallsInit(player2Pokemon.length)
+
+    await backToHomeInit(loadHome)
 
     body.style.display = "block"
     loading.style.display = "none"
@@ -87,12 +101,6 @@ async function setup() {
 }
 
 const timeout = 30
-
-let actions = []
-export function pushAction(index) {
-    if(!standby)
-        actions.push(index)
-}
 
 async function checkPokemonKnockOut(pokemonList, pokemonIndex) {
     const currentPokemon = pokemonList[pokemonIndex]
@@ -170,33 +178,31 @@ async function draw(pokemon1, pokemon2) {
     await drawPokemonUI(pokemon1, pokemon2)
 }
 
-async function tryEvolveRandomPokemon(pokemonList) {
+async function tryEvolvePokemon(pokemonList) {
     if(getRandomInt(0, 100) > 10)
         return
 
+    await stopMusic()
+    await playMusic(evolutionMusic)
+
     let minimum = null
-    for(let i = 0; i < pokemonList.length; i++) {
+    for(let i = 0; i < pokemonList.length; i++)
         if(pokemonList[i].evolution !== null)
-        {
-            if(minimum === null)
+            if(minimum === null || pokemonList[i].health < pokemonList[minimum].health)
                 minimum = i
-            else if(pokemonList[i].health < pokemonList[minimum].health)
-                minimum = i
-        }
-    }
 
     if(minimum === null)
         return
 
     const pokemon = pokemonList[minimum]
-    const evolution = await loadPokemon(pokemon.evolution[getRandomInt(0, pokemon.evolution.length)])
+    const evolution = await loadPokemon(pokemon.evolution[getRandomInt(0, pokemon.evolution.length)], loadTypes | loadSprites)
 
     let flag = false
-    await showEvolutionInit(pokemon, evolution, () => {
+    await showEvolutionInit(pokemon, evolution, async () => {
         const pokemonData = JSON.parse(localStorage.getItem(myPokemonKey));
 
-        const all = pokemonData[allPokemon]
-        const selected = pokemonData[selectedPokemon]
+        const all = pokemonData[allPokemonKey]
+        const selected = pokemonData[selectedPokemonKey]
 
         all.splice(all.indexOf(pokemon.name), 1)
         selected.splice(selected.indexOf(pokemon.name), 1)
@@ -205,12 +211,16 @@ async function tryEvolveRandomPokemon(pokemonList) {
         selected.push(evolution.name)
 
         localStorage.setItem(myPokemonKey, JSON.stringify({
-            [allPokemon] : all,
-            [selectedPokemon] : selected
+            [allPokemonKey] : all,
+            [selectedPokemonKey] : selected
         }))
 
+        await stopMusic()
+        await playSFX(evolvedSFX)
+
         flag = true
-    }, () => {
+    }, async () => {
+        await stopMusic()
         flag = true
     })
 
@@ -230,18 +240,19 @@ async function tryEvolveRandomPokemon(pokemonList) {
 }
 
 async function manageBattleWin(pokemonList) {
-    backgroundMusic.pause()
+    await pushLog("You Win!", 0)
 
-    backgroundMusic = await playMainMusic(victoryMusic)
-    await backgroundMusic.play()
+    await stopMusic()
 
-    await tryEvolveRandomPokemon(pokemonList)
+    await tryEvolvePokemon(pokemonList)
+
+    await playMusic(victoryMusic)
 
     const pokemonData = JSON.parse(localStorage.getItem(myPokemonKey));
-    const pokemon = JSON.parse(localStorage.getItem(battle))[battlePokemon];
+    const pokemon = JSON.parse(localStorage.getItem(battleKey))[battlePokemon];
 
     if(pokemon.length === 1) {
-        const names = pokemonData[allPokemon]
+        const names = pokemonData[allPokemonKey]
         const name = pokemon[0].toLowerCase()
 
         if(names.indexOf(name) < 0)
@@ -249,8 +260,8 @@ async function manageBattleWin(pokemonList) {
             names.push(name)
 
             localStorage.setItem(myPokemonKey, JSON.stringify({
-                [allPokemon] : names,
-                [selectedPokemon] : pokemonData[selectedPokemon]
+                [allPokemonKey] : names,
+                [selectedPokemonKey] : pokemonData[selectedPokemonKey]
             }))
 
             await pushLog(`You've successfully caught ${pokemon[0]}!`, 0)
@@ -258,7 +269,13 @@ async function manageBattleWin(pokemonList) {
     }
 }
 
-let standby = false
+async function manageBattleLoss() {
+    await pushLog("You Lose", 1)
+
+    await stopMusic()
+    await playMusic(lossMusic)
+}
+
 async function gameLoop(player1Index, player2Index, player1Pokemon, player2Pokemon) {
     if(actions.length > 0) {
         standby = true
@@ -310,7 +327,7 @@ async function gameLoop(player1Index, player2Index, player1Pokemon, player2Pokem
                 if(prevPlayer1Index !== player1Index)
                     await initAttacks(player1Pokemon[player1Index])
                 else
-                    await toggleAttacks(player1Pokemon[player1Index].moves.length)
+                    await toggleAttacks(player1Pokemon[player1Index].moves.length, false)
 
                 if(prevPlayer2Index !== player2Index)
                     await managePokeBalls(player2Pokemon)
@@ -320,17 +337,12 @@ async function gameLoop(player1Index, player2Index, player1Pokemon, player2Pokem
                 await draw(player1Pokemon[prevPlayer1Index], player2Pokemon[prevPlayer2Index])
 
                 if(player2Index < 0)
-                {
-                    await pushLog("You Win!", 0)
                     await manageBattleWin(player1Pokemon)
-                }
                 else
-                    await pushLog("You Lose", 1)
+                    await manageBattleLoss()
 
-                localStorage.setItem(battle, null)
                 await new Promise(r => setTimeout(r, 8000))
-
-                await loadPage(mainPage)
+                await loadHome()
             }
         }
 

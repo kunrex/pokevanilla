@@ -1,21 +1,12 @@
 @import "../../global.css";
 
 body {
-    background-color: papayawhip;
+    background-color: navajowhite;
 }
 
 h1 {
     color: var(--color-dark);
     font-family: Roboto, sans-serif;
-}
-
-#loading {
-    position: fixed;
-
-    top: 50%;
-    left: 50%;
-
-    transform: translate(-50%, -50%);
 }
 
 button {

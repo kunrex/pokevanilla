@@ -354,3 +354,11 @@ body {
 
     margin-top: 1rem;
 }
+
+#back_to_home:hover {
+   color: navajowhite;
+}
+
+#back_to_home:active {
+    color: papayawhip;
+}

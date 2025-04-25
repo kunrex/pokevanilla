@@ -1,14 +1,10 @@
-import { playMainMusic, playMoveSound } from "../../utils/music.js";
-import { getRandomInt, loadPage, loadPokemon, onWindowResize } from "../../utils/utilities.js";
-import { battlePage, battlePokemon, battle, starterMusic, myPokemonKey, starterPage, worldIndexKey, terrainIndexes, worldRequests, wtr, sea } from "../../utils/constants.js";
+import { playMusic, playSFX, preLoadMusic, preLoadSFX } from "../../utils/music.js";
+import { getRandomInt, loadPage, loadPokemon, loadPokemonList, onWindowResize } from "../../utils/utilities.js";
+import { battlePage, battlePokemon, battleKey, starterMusic, myPokemonKey, starterPage, worldIndexKey, terrainIndexes, worldRequests, wtr, sea, clickSFX, minTrainerPokemon, maxTrainerPokemon, pokemonCount, loadTypes, loadSprites, moveSFX, allPokemonKey, selectedPokemonKey } from "../../utils/constants.js";
 
 import { canMove, maskIndex } from "./worlds/collision.js";
-import { clearCatch, setUpPokemonSelect, setUpCatch, generateRandomTrainer } from "./scripts/controls.js";
+import { clearBattle, pokemonSelectInit, catchSetup, trainerSetup } from "./scripts/controls.js";
 import { gridWidth, gridHeight, conversionRatio, clearRect, drawWorld, drawPlayer, loadAllWorlds } from "./scripts/draw.js";
-
-export async function loadBattle(pokemonNames) {
-    actions.push(pokemonNames)
-}
 
 const body = document.getElementById("body")
 const loading = document.getElementById("loading")
@@ -35,23 +31,71 @@ async function loadPokemonFromHabitat(url) {
 }
 
 async function generateRandomPokemon(x, y) {
-    const index = maskIndex(x, y)
     const terrainPokemon = terrainBasedPokemon[maskIndex(x, y)]
+    const pokemon = await loadPokemon(terrainPokemon[getRandomInt(0, terrainPokemon.length)], loadTypes | loadSprites)
 
-    if (index > 0)
-        await setUpCatch(await loadPokemon(terrainPokemon[getRandomInt(0, terrainPokemon.length)]))
-    else
-        await setUpCatch(await loadPokemon(terrainPokemon[getRandomInt(0, terrainPokemon.length)]))
+    await catchSetup(pokemon, async () => {
+        await playSFX(clickSFX)
+        actions.push([pokemon.name])
+    })
+}
+
+async function generateRandomTrainer() {
+    const count = getRandomInt(minTrainerPokemon, maxTrainerPokemon + 1)
+
+    const pokemon = []
+    for(let i = 0; i < count; i++)
+        pokemon.push(getRandomInt(0, pokemonCount))
+
+    await trainerSetup(pokemon, async () => {
+        await playSFX(clickSFX)
+        actions.push(pokemon)
+    })
 }
 
 async function generateRandomOpponent(x, y) {
     const random = getRandomInt(0, 100)
+
     if(random > 25)
-        await clearCatch()
+        await clearBattle()
     else if(random > 10)
         await generateRandomPokemon(x, y)
     else
         await generateRandomTrainer()
+}
+
+const localPokemonData = JSON.parse(localStorage.getItem(myPokemonKey))
+
+const all = localPokemonData[allPokemonKey]
+const selected = localPokemonData[selectedPokemonKey]
+
+const allPokemon = await loadPokemonList(all, loadTypes | loadSprites)
+
+async function onPokemonSelect(name) {
+    let value = false
+    if(selected.indexOf(name) < 0) {
+        if(selected.length === 6)
+            return false
+
+        selected.push(name)
+        await playSFX(clickSFX)
+
+        value = true
+    }
+    else {
+        if(selected.length === 1)
+            return true
+
+        selected.splice(selected.indexOf(name), 1)
+        await playSFX(clickSFX)
+    }
+
+    localStorage.setItem(myPokemonKey, JSON.stringify({
+        [allPokemonKey] : all,
+        [selectedPokemonKey]: selected
+    }))
+
+    return value
 }
 
 function calculateWorldIndex(x, y) {
@@ -63,25 +107,23 @@ const actions = []
 
 let standby = false
 async function setup() {
-    const pokemonData = localStorage.getItem(myPokemonKey);
-    if(pokemonData === null) {
-        await loadPage(starterPage)
-    }
+    await preLoadSFX([clickSFX, moveSFX])
+    await preLoadMusic([starterMusic])
 
-    const audio = await playMainMusic(starterMusic)
-    try {
-        await audio.play()
-    }
-    catch (e) { }
+    const pokemonData = localStorage.getItem(myPokemonKey);
+    if(pokemonData === "null")
+        await loadPage(starterPage)
+
+    await playMusic(starterMusic)
 
     const worldIndexData = JSON.parse(localStorage.getItem(worldIndexKey))
     const xInit = worldIndexData === null ? gridWidth / 2 : worldIndexData["x"], yInit = worldIndexData === null ? gridHeight / 2 : worldIndexData["y"]
 
     await loadAllWorlds()
 
-    await draw( 0, xInit, yInit)
+    await draw(0, xInit, yInit)
 
-    await setUpPokemonSelect()
+    await pokemonSelectInit(allPokemon, selected, onPokemonSelect)
 
     for(let i = 0; i < terrainIndexes.length; i++)
         terrainBasedPokemon.push(await loadPokemonFromHabitat(worldRequests[i]))
@@ -113,7 +155,7 @@ async function setup() {
         }
     })
 
-    await gameLoop(xInit, yInit, 0, calculateWorldIndex(xInit, yInit))
+    await gameLoop(xInit, yInit, 0)
 }
 
 async function draw(spriteIndex, x, y) {
@@ -129,7 +171,7 @@ async function draw(spriteIndex, x, y) {
     await drawPlayer(spriteIndex, xCanvas * conversionRatio - 4, yCanvas * conversionRatio - 8, mask === wtr || mask === sea)
 }
 
-async function gameLoop(x, y, spriteIndex, worldIndex) {
+async function gameLoop(x, y, spriteIndex) {
     if(actions.length > 0) {
         const action = actions.shift()
 
@@ -142,7 +184,6 @@ async function gameLoop(x, y, spriteIndex, worldIndex) {
                 {
                     x--
                     spriteIndex = 1
-                    worldIndex = calculateWorldIndex(x, y)
 
                     move = true
                 }
@@ -152,7 +193,6 @@ async function gameLoop(x, y, spriteIndex, worldIndex) {
                 {
                     x++
                     spriteIndex = 2
-                    worldIndex = calculateWorldIndex(x, y)
 
                     move = true
                 }
@@ -162,7 +202,6 @@ async function gameLoop(x, y, spriteIndex, worldIndex) {
                 {
                     y--
                     spriteIndex = 3
-                    worldIndex = calculateWorldIndex(x, y)
 
                     move = true
                 }
@@ -172,13 +211,12 @@ async function gameLoop(x, y, spriteIndex, worldIndex) {
                 {
                     y++
                     spriteIndex = 0
-                    worldIndex = calculateWorldIndex(x, y)
 
                     move = true
                 }
                 break
             default:
-                localStorage.setItem(battle, JSON.stringify({
+                localStorage.setItem(battleKey, JSON.stringify({
                     [battlePokemon]: action
                 }))
 
@@ -188,12 +226,11 @@ async function gameLoop(x, y, spriteIndex, worldIndex) {
                 }))
 
                 await loadPage(battlePage)
-                break
         }
 
         if(move)
         {
-            await playMoveSound()
+            await playSFX(moveSFX)
             await draw(spriteIndex, x, y)
 
             await generateRandomOpponent(x, y)
@@ -202,7 +239,7 @@ async function gameLoop(x, y, spriteIndex, worldIndex) {
         standby = false
     }
 
-    setTimeout(() => { gameLoop(x, y, spriteIndex, worldIndex).then() }, timeOut)
+    setTimeout(() => { gameLoop(x, y, spriteIndex).then() }, timeOut)
 }
 
 window.onresize = () => {

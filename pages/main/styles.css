@@ -74,7 +74,7 @@ body {
     font-family: RobotoThin, sans-serif;
 }
 
-#catch {
+#battle {
     border-radius: 1rem;
 
     padding: 1rem;
@@ -88,15 +88,15 @@ body {
     font-family: RetroFont, sans-serif;
 }
 
-#catch:hover {
+#battle:hover {
     border-color: navajowhite;
 }
 
-#catch:active {
+#battle:active {
     border-color: black;
 }
 
-#catch:disabled {
+#battle:disabled {
     border-color: transparent;
 }
 

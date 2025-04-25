@@ -34,6 +34,15 @@
     src: url('assets/fonts/roboto-thin.ttf') format('truetype');
 }
 
+#loading {
+    position: fixed;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+}
+
 #volume {
     position: fixed;
 
@@ -42,6 +51,24 @@
 
     width: 2.5rem;
     height: auto;
+}
+
+#volume:hover {
+    cursor: pointer;
+
+    transform: scale(1.2);
+}
+
+#pc_warning {
+    position: fixed;
+
+    margin-left: 1rem;
+
+    right: 1rem;
+    bottom: 1rem;
+
+    font-size: 1rem;
+    font-family: RetroFont, sans-serif;
 }
 
 .row, .column, .row_start, .row_end, .column_start, .column_end {
@@ -83,16 +110,4 @@
 .overflow_y {
     overflow-x: hidden;
     overflow-y: auto;
-}
-
-#pc_warning {
-    position: fixed;
-
-    margin-left: 1rem;
-
-    right: 1rem;
-    bottom: 1rem;
-
-    font-size: 1rem;
-    font-family: RetroFont, sans-serif;
 }

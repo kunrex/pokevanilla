@@ -1,7 +1,4 @@
-export const myPokemonKey = "collection"
-
-export const allPokemon = "all"
-export const selectedPokemon = "selected"
+export const minWidth = 1600, minHeight = 900
 
 export const mainPage = "main", battlePage = "battlePage", starterPage = "starterPage"
 
@@ -11,6 +8,23 @@ export const pages = {
     [starterPage] : "../starters/starter.html",
 }
 
+export const moveSFX = "move", clickSFX = "click", evolvedSFX = "evolved"
+export const lossMusic = "lossMusic",  battleMusic = "battleMusic", starterMusic = "starterMusic", victoryMusic = "victoryMusic", evolutionMusic = "evolutionMusic"
+
+export const audio = {
+    [moveSFX]: "../../assets/audio/move.mp3",
+    [clickSFX]:  "../../assets/audio/click.ogg",
+    [evolvedSFX]:  "../../assets/audio/evolved.ogg",
+
+    [lossMusic]: "../../assets/audio/loss.ogg",
+    [battleMusic] : "../../assets/audio/battle.ogg",
+    [starterMusic]: "../../assets/audio/starter.ogg",
+    [victoryMusic]: "../../assets/audio/victory.ogg",
+    [evolutionMusic]: "../../assets/audio/evolution.ogg",
+}
+
+export const myPokemonKey = "myPokemon", allPokemonKey = "allPokemon", selectedPokemonKey = "selectedPokemon"
+
 export const starters = [
     "bulbasaur", "eevee", "cyndaquil", "treecko",
     "chimchar", "tepig", "fennekin", "charmander",
@@ -19,26 +33,32 @@ export const starters = [
     "torchic", "piplup", "snivy", "froakie"
 ]
 
+export const loadTypes = 1, loadStats = 2, loadMoves = 4, loadSprites = 8, loadEvolutions = 16, loadAll = loadTypes | loadStats | loadMoves | loadSprites | loadEvolutions
+
 export const showdownBack = "back", showdownFront = "front", gif = "gif", avatar = "avatar"
 
-export const battle = "battle", battlePokemon = "battlePokemon"
-
-export const starterMusic = "starter", battleMusic = "battleMusic", victoryMusic = "victoryMusic", click = "click", moveSound = "move"
-
-export const audio = {
-    [starterMusic] : "../../assets/audio/starter.ogg",
-    [battleMusic] : "../../assets/audio/battle.ogg",
-    [victoryMusic]: "../../assets/audio/victory.ogg",
-    [click]:  "../../assets/audio/click.mp3",
-    [moveSound]: "../../assets/audio/move.mp3",
-}
-
 export const active = "active", inactive = "inactive"
+
+export const battleKey = "battle", battlePokemon = "battlePokemon"
 
 export const minTrainerPokemon = 3, maxTrainerPokemon = 6
 export const pokemonCount = 500
 
-export const minWidth = 1600, minHeight = 900
+export const worldIndexKey = "worldIndex"
+
+export const sea = 0, wtr = 1, rck = 2, mtn = 3, grs = 4, fst = 5, urb = 6, nan = -1
+
+export const terrainIndexes = [sea, wtr, rck, mtn, grs, fst, urb]
+
+export const worldRequests = [
+    "https://pokeapi.co/api/v2/pokemon-habitat/sea/",
+    "https://pokeapi.co/api/v2/pokemon-habitat/waters-edge/",
+    "https://pokeapi.co/api/v2/pokemon-habitat/rough-terrain/",
+    "https://pokeapi.co/api/v2/pokemon-habitat/mountain/",
+    "https://pokeapi.co/api/v2/pokemon-habitat/grassland/",
+    "https://pokeapi.co/api/v2/pokemon-habitat/forest/",
+    "https://pokeapi.co/api/v2/pokemon-habitat/urban/",
+]
 
 export const attackTypeTable = {
     normal: {
@@ -132,19 +152,3 @@ export const attackTypeTable = {
         bug: 1, rock: 1, ghost: 1, dragon: 2, dark: 2, steel: 0.5, fairy: 1
     }
 }
-
-export const worldIndexKey = "worldIndex"
-
-export const sea = 0, wtr = 1, rck = 2, mtn = 3, grs = 4, fst = 5, urb = 6, nan = -1
-
-export const terrainIndexes = [sea, wtr, rck, mtn, grs, fst, urb]
-
-export const worldRequests = [
-    "https://pokeapi.co/api/v2/pokemon-habitat/sea/",
-    "https://pokeapi.co/api/v2/pokemon-habitat/waters-edge/",
-    "https://pokeapi.co/api/v2/pokemon-habitat/rough-terrain/",
-    "https://pokeapi.co/api/v2/pokemon-habitat/mountain/",
-    "https://pokeapi.co/api/v2/pokemon-habitat/grassland/",
-    "https://pokeapi.co/api/v2/pokemon-habitat/forest/",
-    "https://pokeapi.co/api/v2/pokemon-habitat/urban/",
-]

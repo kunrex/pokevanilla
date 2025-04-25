@@ -98,5 +98,3 @@ export async function waitLoadFonts() {
     await document.fonts.load("24px RetroFont");
     ctx.font = "24px RetroFont";
 }
-
-waitLoadFonts().then()

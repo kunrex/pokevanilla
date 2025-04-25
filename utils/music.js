@@ -1,45 +1,81 @@
-import { loadMusic } from "./utilities.js";
-import { click, moveSound } from "./constants.js";
+import { audio } from "./constants.js";
 
-const move = loadMusic(moveSound)
-move.loop = false
+const sfx = { }
+const music = { }
 
-export async function playMoveSound() {
-    if(!move.paused)
-    {
-        move.pause()
-        move.currentTime = 0
-    }
+let soundOff = false
+let currentMusic = null
 
-    await move.play()
+function loadAudio(music) {
+    const file = new Audio(audio[music])
+    file.currentTime = 0
+
+    return file
 }
 
-const buttonClick = loadMusic(click)
-buttonClick.loop = false
+const volume = document.getElementById("volume")
+volume.onclick = async () => {
+    soundOff = !soundOff
 
-export async function playButtonClick() {
-    if(!buttonClick.paused)
+    if(currentMusic !== null)
     {
-        buttonClick.pause()
-        buttonClick.currentTime = 0
-    }
-
-    await buttonClick.play()
-}
-
-export async function playMainMusic(music) {
-    const volume = document.getElementById("volume")
-    const audio = loadMusic(music)
-
-    let playing = false
-    volume.onclick = async () => {
-        if(playing)
-            audio.pause()
+        if(soundOff)
+            currentMusic.pause()
         else
-            await audio.play()
+            await currentMusic.play()
+    }
+}
 
-        playing = !playing
+export async function preLoadSFX(effectIds) {
+    for(let i = 0; i < effectIds.length; i++) {
+        const id = effectIds[i];
+        const audio = loadAudio(id)
+        audio.loop = false
+
+        sfx[id] = audio
+    }
+}
+
+export async function playSFX(effectId) {
+    if(soundOff)
+        return
+
+    const effect = sfx[effectId]
+    if(!effect.paused)
+    {
+        effect.pause()
+        effect.currentTime = 0
     }
 
-    return audio
+    await effect.play()
+}
+
+export async function preLoadMusic(musicIds) {
+    for(let i = 0; i < musicIds.length; i++) {
+        const id = musicIds[i]
+        const audio = loadAudio(id)
+        audio.loop = true
+
+        music[id] = audio
+    }
+}
+
+export async function playMusic(musicId) {
+    if(currentMusic !== null && !soundOff)
+        currentMusic.pause()
+
+    currentMusic = music[musicId]
+
+    try {
+        if(!soundOff)
+            await currentMusic.play()
+    }
+    catch (e) { }
+}
+
+export async function stopMusic() {
+    if(currentMusic !== null)
+        currentMusic.pause()
+
+    currentMusic = null
 }

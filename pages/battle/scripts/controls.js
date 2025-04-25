@@ -1,13 +1,10 @@
-import {active, battle, gif, inactive, mainPage} from "../../../utils/constants.js";
+import { active, gif, inactive } from "../../../utils/constants.js";
+import { loadImage, capitalise } from "../../../utils/utilities.js";
 
-import { pushAction } from "../battle.js";
-import {loadImage, loadPage} from "../../../utils/utilities.js";
-import { playButtonClick } from "../../../utils/music.js";
-
-function getAttackButtons() {
+const buttons = []
+export function attackButtonsInit(onAttackButtonClick) {
     const attackStr = "attack"
 
-    let buttons = []
     for(let i = 0; i < 4; i++)
     {
         const button = document.getElementById(attackStr + (i + 1))
@@ -15,16 +12,11 @@ function getAttackButtons() {
 
         button.onclick = async () => {
             if(button.dataset.status === active)
-            {
-                await playButtonClick()
-                pushAction(i)
-            }
+                await onAttackButtonClick(i)
         }
 
         buttons.push(button)
     }
-
-    return buttons
 }
 
 export function initAttacks(pokemon) {
@@ -42,51 +34,39 @@ export function initAttacks(pokemon) {
         titleContainer.children[0].innerText = move.name
         titleContainer.children[1].children[0].innerText = `${move.type} type attack`
 
-        button.dataset.status = active
         button.children[1].children[0].innerText = move.power
+
+        button.dataset.status = active
     }
 
     for(let i = moves.length; i < buttons.length; i++)
+    {
+        const button = buttons[i]
+
+        const titleContainer = button.children[0].children[0]
+        titleContainer.children[0].innerText = ""
+        titleContainer.children[1].children[0].innerText = ""
+
+        button.children[1].children[0].innerText = ""
+
         buttons[i].dataset.status = inactive
+    }
 }
 
 export function toggleAttacks(moveCount, disabled) {
     const state = disabled ? inactive : active
 
-    for(let i = 0; i < moveCount; i++) {
-        const current = buttons[i]
-
-        current.dataset.status = state
-    }
+    for(let i = 0; i < moveCount; i++)
+        buttons[i].dataset.status = state
 
     for(let i = moveCount; i < buttons.length; i++)
-    {
-        const current = buttons[i]
-
-        current.dataset.status = "inactive"
-    }
+        buttons[i].dataset.status = inactive
 }
-
-const log = document.getElementById('log')
-const logParent = log.parentElement
-const logIndexes = ["good_for_player", "bad_for_player", "knock_out"]
-
-export function pushLog(message, index) {
-    const node = document.createElement("li");
-    node.innerText = message
-    node.classList.add(logIndexes[index])
-
-    logParent.scrollTop = logParent.scrollHeight
-
-    log.appendChild(node);
-}
-
-const buttons = getAttackButtons()
 
 const selection_options = []
 const selection_parent = document.getElementById('pokemon_select')
 
-export async function initSelection(pokemonList) {
+export async function initSelection(pokemonList, onPokemonSelect) {
     for(let i = 0; i < pokemonList.length; i++) {
         const node = document.createElement("div")
         node.classList.add("pokemon_card")
@@ -101,11 +81,7 @@ export async function initSelection(pokemonList) {
         node.appendChild(heading)
 
         node.onclick = async () => {
-            if(node.dataset.status === active)
-            {
-                await playButtonClick()
-                pushAction(i + 4)
-            }
+            await onPokemonSelect(i + 4)
         }
 
         selection_parent.appendChild(node)
@@ -119,9 +95,8 @@ export async function manageSelection(pokemonList, currentIndex) {
     for(let i = 0; i < pokemonList.length; i++) {
         const current = selection_options[i]
 
-        if(pokemonList[i].health <= 0) {
+        if(pokemonList[i].health <= 0)
             current.dataset.status = knockOut
-        }
         else if(i === currentIndex)
             current.dataset.status = inactive
         else
@@ -134,18 +109,12 @@ export function disableSelection() {
         selection_options[i].dataset.status = inactive
 }
 
-const back_to_home = document.getElementById('back_to_home')
-back_to_home.onclick = async () => {
-    localStorage.setItem(battle, null)
-    await loadPage(mainPage)
-}
-
 const pokeBalls = []
 const player2PokeBalls = document.getElementById('player_poke_balls')
 export async function pokeBallsInit(count) {
     for(let i = 0; i < count; i++) {
         const pokeBall = document.createElement("img")
-        pokeBall.src = "ui/pokeball.png"
+        pokeBall.src = "ui/poke_ball.png"
 
         player2PokeBalls.appendChild(pokeBall)
         pokeBalls.push(pokeBall)
@@ -155,8 +124,28 @@ export async function pokeBallsInit(count) {
 export async function managePokeBalls(pokemon) {
     for(let i = 0; i < pokemon.length; i++) {
         if(pokemon[i].health <= 0)
-            pokeBalls[i].src = "ui/pokeball-disabled.png"
+            pokeBalls[i].src = "ui/poke_ball-disabled.png"
     }
+}
+
+const back_to_home = document.getElementById('back_to_home')
+export function backToHomeInit(onGoHomeClick) {
+    back_to_home.onclick = async () => {
+        await onGoHomeClick()
+    }
+}
+
+const log = document.getElementById('log')
+const logParent = log.parentElement
+const logIndexes = [ "good_for_player", "bad_for_player", "knock_out" ]
+
+export function pushLog(message, index) {
+    const node = document.createElement("li");
+    node.innerText = message
+    node.classList.add(logIndexes[index])
+
+    log.appendChild(node)
+    logParent.scrollTop = logParent.scrollHeight
 }
 
 const evolutionTab = document.getElementById("pokemon_evolve")
@@ -164,10 +153,6 @@ evolutionTab.style.display = "none"
 
 const evolve = document.getElementById("evolve")
 const dontEvolve = document.getElementById("dont_evolve")
-
-function capitalise(val) {
-    return val.charAt(0).toUpperCase() + val.slice(1);
-}
 
 export async function showEvolutionInit(pokemon, evolution, onSelectEvolve, onDeselectEvolve) {
     evolutionTab.style.backgroundColor = `var(--color-${pokemon.types[0]})`
@@ -198,7 +183,7 @@ export async function showEvolutionInit(pokemon, evolution, onSelectEvolve, onDe
 
         heading.innerHTML = `${capitalise(pokemon.name)} has evolved into ${capitalise(evolution.name)}!`
 
-        onSelectEvolve()
+        await onSelectEvolve()
 
         setTimeout(() => {
             evolutionTab.style.display = "none"
@@ -208,13 +193,13 @@ export async function showEvolutionInit(pokemon, evolution, onSelectEvolve, onDe
         }, 3000)
     }
 
-    dontEvolve.onclick = () => {
+    dontEvolve.onclick = async () => {
         evolutionTab.style.display = "none"
 
         img.src = ""
         heading.innerHTML = ""
 
-        onDeselectEvolve()
+        await onDeselectEvolve()
     }
 
     evolutionTab.style.display = "block"

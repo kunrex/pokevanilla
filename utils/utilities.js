@@ -1,4 +1,4 @@
-import { pages, gif, showdownBack, showdownFront, avatar, audio, minWidth, minHeight } from "./constants.js";
+import { pages, gif, showdownBack, showdownFront, avatar, minWidth, minHeight, loadEvolutions, loadTypes, loadStats, loadSprites, loadMoves } from "./constants.js";
 
 export function getRandom(min, max) {
     return Math.random() * (max - min) + min;
@@ -6,6 +6,10 @@ export function getRandom(min, max) {
 
 export function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
+}
+
+export function capitalise(val) {
+    return val.charAt(0).toUpperCase() + val.slice(1);
 }
 
 export async function loadPage(page) {
@@ -128,8 +132,7 @@ async function pushEvolution(pokemon) {
     }
 }
 
-export async function loadPokemon(identifier) {
-
+export async function loadPokemon(identifier, informationMask) {
     const url = `https://pokeapi.co/api/v2/pokemon/${identifier}`
 
     try
@@ -145,12 +148,20 @@ export async function loadPokemon(identifier) {
             name: json["name"].replace('-', ' ').toLowerCase(),
         }
 
-        pokemon.evolution = await pushEvolution(pokemon.name)
+        if((informationMask & loadTypes) === loadTypes)
+            pushTypes(pokemon, json["types"])
 
-        pushTypes(pokemon, json["types"])
-        pushStats(pokemon, json["stats"])
-        pushSprites(pokemon, json["sprites"])
-        await pushMoves(pokemon, json["moves"])
+        if((informationMask & loadMoves) === loadMoves)
+            await pushMoves(pokemon, json["moves"])
+
+        if((informationMask & loadStats) === loadStats)
+            pushStats(pokemon, json["stats"])
+
+        if((informationMask & loadSprites) === loadSprites)
+            pushSprites(pokemon, json["sprites"])
+
+        if((informationMask & loadEvolutions) === loadEvolutions)
+            pokemon.evolution = await pushEvolution(pokemon.name)
 
         return pokemon
     }
@@ -159,26 +170,17 @@ export async function loadPokemon(identifier) {
     }
 }
 
-const apiDelay = new Promise(r => setTimeout(r, 100))
-export async function loadPokemonList(list) {
+const callDelay = new Promise(r => setTimeout(r, 100))
+export async function loadPokemonList(list, informationMask) {
     let final = []
 
     for (let i = 0; i < list.length; i++)
     {
-        final.push(await loadPokemon(list[i]))
-        await apiDelay
+        final.push(await loadPokemon(list[i], informationMask))
+        await callDelay
     }
 
     return final
-}
-
-export function loadMusic(music) {
-    const file = new Audio(audio[music])
-
-    file.currentTime = 0
-    file.loop = true
-
-    return file
 }
 
 export function onWindowResize(loading, body, warning) {
