@@ -221,6 +221,11 @@ body {
     width: 20%;
 
     height: 100%;
+
+    display: flex;
+    align-content: center;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .power {
@@ -357,5 +362,7 @@ body {
 
     .power {
         margin-left: .45rem;
+
+        font-size: 1.25rem;
     }
 }
