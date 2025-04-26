@@ -3,16 +3,16 @@ import { showdownBack , showdownFront, gif } from "../../../utils/constants.js";
 
 const canvasWidth = 1280, canvasHeight = 720
 
+const player1Coords = [50, 575], player2Coords = [1000, 575]
+const player1UICoords = [450, 580] , player2UICoords = [700, 275]
+const player1TextCoords = [525, 640], player2TextCoords = [720, 310]
+const player1HealthCoords = [665, 650], player2HealthCoords = [880, 315]
+
 const canvas = document.getElementById('world')
 canvas.width = canvasWidth
 canvas.height = canvasHeight
 
 const ctx = canvas.getContext('2d')
-
-const player1Coords = [50, 575], player2Coords = [1000, 575]
-const player1UICoords = [450, 580] , player2UICoords = [700, 275]
-const player1TextCoords = [525, 640], player2TextCoords = [720, 310]
-const player1HealthCoords = [665, 650], player2HealthCoords = [880, 315]
 
 const player1Image = document.getElementById('player1')
 const player2Image = document.getElementById('player2')
@@ -39,7 +39,7 @@ export async function drawPlayer1Pokemon(pokemon) {
     if(player1Sprite !== sprite)
         await loadImage(player1Image, sprite)
 
-    ctx.drawImage(player1Image, 0, 0, player1Image.width, player1Image.height, player1Coords[0], player1Coords[1] - (player1Image.height * 2), player1Image.width * 4, player1Image.height * 4)
+    ctx.drawImage(player1Image, 0, 0, player1Image.width, player1Image.height, player1Coords[0], (player1Coords[1] - (player1Image.height * 2)), player1Image.width * 4, player1Image.height * 4)
 }
 
 let player2Sprite = null
@@ -51,7 +51,7 @@ export async function drawPlayer2Pokemon(pokemon) {
     if(player2Sprite !== sprite)
         await loadImage(player2Image, pokemon.sprites[showdownFront])
 
-    ctx.drawImage(player2Image, 0, 0, player2Image.width, player2Image.height, player2Coords[0], player2Coords[1] - (player2Image.height * 2), player2Image.width * 3, player2Image.height * 3)
+    ctx.drawImage(player2Image, 0, 0, player2Image.width, player2Image.height, player2Coords[0], (player2Coords[1] - (player2Image.height * 2)), player2Image.width * 3, player2Image.height * 3)
 }
 
 const player1Bar = document.getElementById('player1Bar')

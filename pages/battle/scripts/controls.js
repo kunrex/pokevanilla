@@ -32,7 +32,7 @@ export function initAttacks(pokemon) {
 
         const titleContainer = background.children[0]
         titleContainer.children[0].innerText = move.name
-        titleContainer.children[1].children[0].innerText = `${move.type} type attack`
+        titleContainer.children[1].innerText = `${move.type} type attack`
 
         button.children[1].children[0].innerText = move.power
 
@@ -45,7 +45,7 @@ export function initAttacks(pokemon) {
 
         const titleContainer = button.children[0].children[0]
         titleContainer.children[0].innerText = ""
-        titleContainer.children[1].children[0].innerText = ""
+        titleContainer.children[1].innerText = ""
 
         button.children[1].children[0].innerText = ""
 

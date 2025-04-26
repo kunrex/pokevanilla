@@ -172,7 +172,7 @@ body {
 
     background-color: black;
 
-    width: min(20rem, 30vw);
+    width: 20rem;
 
     display: flex;
     align-items: center;
@@ -197,31 +197,11 @@ body {
     justify-content: start;
 }
 
-.attack_title {
+.attack_title_container h3, h5 {
     padding: 0;
     margin: 0 .25rem 0 3rem;
 
-    font-family: Arial, sans-serif;
-}
-
-.attack_sub_title {
-    overflow-x: scroll;
-    white-space: nowrap;
-
-    width: min(12rem, 15vw);
-}
-
-.attack_sub_title::-webkit-scrollbar {
-     display: none;
-}
-
-.attack_sub_title h6 {
-    padding: 0;
-    margin: 0 0 0 3rem;
-
-    font-size: .85rem;
-
-    font-family: Arial, sans-serif;
+    font-family: Roboto, sans-serif;
 }
 
 .attack[data-status="active"] {
@@ -361,4 +341,21 @@ body {
 
 #back_to_home:active {
     color: papayawhip;
+}
+
+@media screen and (max-width: 1650px) {
+    .attack {
+        width: 15rem;
+    }
+
+    .attack_title {
+        padding: 0;
+        margin: 0 .25rem 0 2rem;
+
+        font-family: Roboto, sans-serif;
+    }
+
+    .power {
+        margin-left: .45rem;
+    }
 }

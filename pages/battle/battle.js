@@ -1,39 +1,9 @@
 import { playMusic, playSFX, preLoadMusic, preLoadSFX, stopMusic } from "../../utils/music.js";
 import { getRandom, getRandomInt, loadPage, loadPokemon, loadPokemonList, onWindowResize } from "../../utils/utilities.js";
-import {
-    battlePokemon,
-    battleKey,
-    myPokemonKey,
-    selectedPokemonKey,
-    allPokemonKey,
-    victoryMusic,
-    mainPage,
-    battleMusic,
-    starterPage,
-    attackTypeTable,
-    clickSFX,
-    evolvedSFX,
-    evolutionMusic,
-    lossMusic,
-    loadAll,
-    loadTypes, loadSprites
-} from "../../utils/constants.js";
+import { battlePokemon, battleKey, myPokemonKey, selectedPokemonKey, allPokemonKey, victoryMusic, mainPage, battleMusic, starterPage, attackTypeTable, clickSFX, evolvedSFX, evolutionMusic, lossMusic, loadAll, loadTypes, loadSprites} from "../../utils/constants.js";
 
-import { clearRect,  drawPlayer1Pokemon, drawPlayer2Pokemon, drawPokemonHealth, drawPokemonUI, loadPokemonImages, loadPokemonUI, waitLoadFonts } from "./scripts/draw.js";
-import {
-    manageSelection,
-    pushLog,
-    initAttacks,
-    initSelection,
-    toggleAttacks,
-    disableSelection,
-    pokeBallsInit,
-    managePokeBalls,
-    showEvolutionInit,
-    attackButtonsInit,
-    backToHomeInit,
-    disablePokeBalls
-} from "./scripts/controls.js";
+import { clearRect, drawPlayer1Pokemon, drawPlayer2Pokemon, drawPokemonHealth, drawPokemonUI, loadPokemonImages, loadPokemonUI, waitLoadFonts} from "./scripts/draw.js";
+import { manageSelection, pushLog, initAttacks, initSelection, toggleAttacks, disableSelection, pokeBallsInit, managePokeBalls, showEvolutionInit, attackButtonsInit, backToHomeInit, disablePokeBalls } from "./scripts/controls.js";
 
 const body = document.getElementById("body")
 const loading = document.getElementById("loading")
