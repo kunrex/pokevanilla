@@ -152,6 +152,11 @@ async function setup() {
         }
     })
 
+    window.onresize = () => {
+        onWindowResize(loading, body, warning)
+        standby = loading.style.display === "block";
+    }
+
     onWindowResize(loading, body, warning)
 
     await gameLoop(xInit, yInit, 0)
@@ -239,11 +244,6 @@ async function gameLoop(x, y, spriteIndex) {
     }
 
     setTimeout(() => { gameLoop(x, y, spriteIndex).then() }, timeOut)
-}
-
-window.onresize = () => {
-    onWindowResize(loading, body, warning)
-    standby = loading.style.display === "block";
 }
 
 setup().then()

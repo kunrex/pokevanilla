@@ -84,6 +84,36 @@ async function pushMoves(pokemon, moves) {
     pokemon.moves = actualMoves
 }
 
+function returnEvolution(evolutionDetails) {
+    const evolutions = []
+    for(let i = 0; i < evolutionDetails.length; i++)
+        evolutions.push(evolutionDetails[i]["species"]["name"].toLowerCase())
+
+    return evolutions
+}
+
+function loadEvolution(current, pokemonName) {
+    const species = current["species"]["name"].toLowerCase()
+
+    const evolutionDetails = current["evolves_to"]
+    if(species === pokemonName)
+    {
+        if(evolutionDetails === null)
+            return null
+
+        return returnEvolution(evolutionDetails)
+    }
+
+    for(let i = 0; i < evolutionDetails.length; i++)
+    {
+        const result = loadEvolution(evolutionDetails[i], pokemonName)
+        if(result !== null)
+            return result
+    }
+
+    return null
+}
+
 async function pushEvolution(pokemon) {
     const url = `https://pokeapi.co/api/v2/pokemon-species/${pokemon}/`
 
@@ -100,32 +130,7 @@ async function pushEvolution(pokemon) {
             return null
 
         const json = await evolutionResponse.json()
-
-        let current = json["chain"]
-        while(true) {
-            let flag = false
-
-            const species = current["species"]["name"].toLowerCase()
-            if(species === pokemon)
-                flag = true
-
-            const evolutionDetails = current["evolves_to"]
-            if(evolutionDetails === null)
-                break
-
-            if(flag)
-            {
-                const evolutions = []
-                for(let i = 0; i < evolutionDetails.length; i++)
-                    evolutions.push(evolutionDetails[i]["species"]["name"].toLowerCase())
-
-                return evolutions
-            }
-
-            current = evolutionDetails
-        }
-
-        return null
+        return loadEvolution(json["chain"], pokemon)
     }
     catch (error) {
         return null

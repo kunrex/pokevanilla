@@ -77,6 +77,10 @@ async function setup() {
 
     await backToHomeInit(loadHome)
 
+    window.onresize = () => {
+        onWindowResize(loading, body, warning)
+    }
+
     onWindowResize(loading, body, warning)
 
     await gameLoop(0, 0, player1Pokemon, player2Pokemon)
@@ -333,10 +337,6 @@ async function gameLoop(player1Index, player2Index, player1Pokemon, player2Pokem
     }
     else
         setTimeout(() => { gameLoop(player1Index, player2Index, player1Pokemon, player2Pokemon).then()  }, timeout)
-}
-
-window.onresize = () => {
-    onWindowResize(loading, body, warning)
 }
 
 setup().then()

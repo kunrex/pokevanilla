@@ -95,10 +95,10 @@ async function setUp() {
         await loadPage(mainPage)
     }
 
-    onWindowResize(loading, body, warning)
-}
+    window.onresize = () => {
+        onWindowResize(loading, body, warning)
+    }
 
-window.onresize = () => {
     onWindowResize(loading, body, warning)
 }
 
