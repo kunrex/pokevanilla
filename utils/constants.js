@@ -1,4 +1,4 @@
-export const minWidth = 1500, minHeight = 850
+export const minWidth = 1600, minHeight = 850
 
 export const mainPage = "main", battlePage = "battlePage", starterPage = "starterPage"
 
