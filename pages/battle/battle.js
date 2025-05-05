@@ -151,7 +151,7 @@ async function manageAttack(attacker, defender, actionIndex, logIndex) {
     const damage = calcBaseDamage(attack, attacker, defender) * (isCritical ? 1.5 : 1) * typeModifier
 
     defender.health -= damage
-    pushLog(`${attacker.name} used ${attack.name}${isCritical ? ", it was super effective! It did " : " and it did "}${Math.floor(damage)} damage!`, logIndex)
+    pushLog(`${attacker.name} used ${attack.name}${isCritical ? `, it was a critical hit! ${typeModifier > 1 ? "It was super effective! " : (typeModifier < 1 ? "It was not very effective. " : "")}It did ` : " and it did "}${Math.floor(damage)} damage!`, logIndex)
 }
 
 async function draw(pokemon1, pokemon2) {
