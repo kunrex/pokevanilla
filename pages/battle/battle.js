@@ -137,7 +137,7 @@ async function attackAnimation(pokemon1, pokemon2, index) {
 async function manageAttack(attacker, defender, actionIndex, logIndex) {
     const attack = attacker.moves[actionIndex]
     const probability = getRandomInt(0, 100)
-    if(probability < 10) {
+    if(probability > attack.accuracy) {
         pushLog(`${attacker.name} used ${attack.name} but it missed!`, logIndex ? 0 : 1)
         return
     }
@@ -145,13 +145,13 @@ async function manageAttack(attacker, defender, actionIndex, logIndex) {
     const isCritical = getRandomInt(0, 4) === 1
 
     let typeModifier = 1
-    for(let i = 0 ;i < defender.types; i++)
+    for(let i = 0 ; i < defender.types.length; i++)
         typeModifier *= attackTypeTable[attack.type][defender.types[i]]
 
     const damage = calcBaseDamage(attack, attacker, defender) * (isCritical ? 1.5 : 1) * typeModifier
 
     defender.health -= damage
-    pushLog(`${attacker.name} used ${attack.name}${isCritical ? `, it was a critical hit! ${typeModifier > 1 ? "It was super effective! " : (typeModifier < 1 ? "It was not very effective. " : "")}It did ` : " and it did "}${Math.floor(damage)} damage!`, logIndex)
+    pushLog(`${attacker.name} used ${attack.name}.${isCritical ? ` It was a critical hit! ` : " "}${typeModifier > 1 ? " It was super effective! " : (typeModifier < 1 ? " It was not very effective. " : " ")}It did ${Math.floor(damage)} damage!`, logIndex)
 }
 
 async function draw(pokemon1, pokemon2) {

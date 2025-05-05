@@ -75,6 +75,7 @@ async function pushMoves(pokemon, moves) {
                 name: move.name.replace('-', ' '),
                 type: json.type.name,
                 power: power,
+                accuracy: json.accuracy
             })
         }
         catch (error)
