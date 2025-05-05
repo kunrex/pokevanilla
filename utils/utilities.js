@@ -37,6 +37,7 @@ function pushStats(pokemon, stats) {
     pokemon.health = stats[0]['base_stat']
     pokemon.attack = stats[1]['base_stat']
     pokemon.defense = stats[2]['base_stat']
+    pokemon.speed = stats[5]['base_stat']
 
     pokemon.maxHealth = pokemon.health
 }
@@ -75,7 +76,8 @@ async function pushMoves(pokemon, moves) {
                 name: move.name.replace('-', ' '),
                 type: json.type.name,
                 power: power,
-                accuracy: json.accuracy
+                accuracy: json.accuracy,
+                pp: json.pp
             })
         }
         catch (error)

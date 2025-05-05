@@ -274,11 +274,23 @@ async function gameLoop(player1Index, player2Index, player1Pokemon, player2Pokem
             const pokemon1 = player1Pokemon[player1Index]
             const pokemon2 = player2Pokemon[player2Index]
 
-            await attackAnimation(pokemon1, pokemon2, 0)
-            await manageAttack(pokemon1, pokemon2, action, 0)
+            const pokemon = [ pokemon1, pokemon2 ]
 
-            await attackAnimation(pokemon1, pokemon2, 1)
-            await manageAttack(pokemon2, pokemon1, getRandomInt(0, 4), 1)
+            const attacks = [async () => {
+                await attackAnimation(pokemon1, pokemon2, 0)
+                await manageAttack(pokemon1, pokemon2, action, 0)
+            }, async() => {
+                await attackAnimation(pokemon1, pokemon2, 1)
+                await manageAttack(pokemon2, pokemon1, getRandomInt(0, 4), 1)
+            }]
+
+            const first = pokemon1.speed > pokemon2.speed ? 0 : (pokemon1.speed < pokemon2.speed ? 1 : (getRandomInt(0, 2) === 1))
+
+            await attacks[first]()
+
+            const second = +!first;
+            if(pokemon[second].health > 0)
+                await attacks[second]()
         }
         else {
             const index = action - 4

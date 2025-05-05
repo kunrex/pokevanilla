@@ -55,6 +55,7 @@ export async function catchSetup(pokemon, onTryCatch) {
     const color =  `var(--color-${pokemon.types[0]})`
 
     catchAlert.style.backgroundColor = color
+
     battleButton.style.backgroundColor = color
 
     catchAlert.children[1].innerText = ""
